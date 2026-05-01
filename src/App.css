@@ -1,0 +1,26 @@
+/* App 全局布局样式 */
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  /* 页面背景改为极浅的暖灰色 */
+  background-color: #F7F6F3;
+}
+
+.main-content {
+  flex: 1;
+  padding-top: 20px;
+  padding-bottom: 40px;
+}
+
+/* 全局圆角统一 16px 变量（保持与 index.css 一致） */
+:root {
+  --radius-lg: 16px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+  /* 字体颜色主色和次级色 */
+  --text-primary: #2D2D2D;
+  --text-secondary: #888888;
+  /* 卡片阴影 */
+  --card-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}

@@ -1,0 +1,251 @@
+/* 区面板样式 */
+.zone-panel {
+  /* 卡片背景纯白，带轻微阴影 */
+  background-color: #FFFFFF;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  /* 卡片顶部细线 - 默认灰色 */
+  border-top: 3px solid #E0E0E0;
+}
+
+/* 工作区 - 卡片顶部细线用柔蓝色 */
+.zone-panel.zone-work {
+  border-top-color: var(--work-color);
+}
+
+/* 推进区 - 卡片顶部细线用柔绿色 */
+.zone-panel.zone-advance {
+  border-top-color: var(--advance-color);
+}
+
+/* 兴趣区 - 卡片顶部细线用柔紫色 */
+.zone-panel.zone-interest {
+  border-top-color: var(--interest-color);
+}
+
+.zone-panel.collapsed .zone-content {
+  display: none;
+}
+
+.zone-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.zone-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.zone-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* 区域标签 badge 用对应颜色的 15% 透明度作背景 */
+.zone-goal-tag {
+  display: inline-block;
+  padding: 4px 10px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  background-color: rgba(0, 0, 0, 0.06);
+  border-radius: var(--radius-sm);
+}
+
+/* 工作区 badge 背景色 */
+.zone-panel.zone-work .zone-goal-tag {
+  background-color: var(--work-tag-bg);
+  color: var(--work-color);
+}
+
+/* 推进区 badge 背景色 */
+.zone-panel.zone-advance .zone-goal-tag {
+  background-color: var(--advance-tag-bg);
+  color: var(--advance-color);
+}
+
+/* 兴趣区 badge 背景色 */
+.zone-panel.zone-interest .zone-goal-tag {
+  background-color: var(--interest-tag-bg);
+  color: var(--interest-color);
+}
+
+.collapse-btn {
+  font-size: 12px;
+  color: var(--text-secondary);
+  transition: transform 0.2s ease;
+}
+
+.zone-content {
+  padding: 0 20px 20px;
+}
+
+.empty-tip {
+  text-align: center;
+  padding: 24px;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+/* 已完成项目折叠区 */
+.completed-projects-section {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--border-color);
+}
+
+.completed-projects-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  user-select: none;
+  border-radius: var(--radius-md);
+  transition: background-color 0.2s ease;
+}
+
+.completed-projects-header:hover {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+.completed-toggle {
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+
+.completed-title {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.completed-projects-list {
+  margin-top: 8px;
+}
+
+/* 新建项目按钮：虚线边框改为实线 */
+.add-project-btn {
+  width: 100%;
+  padding: 12px;
+  margin: 12px 0;
+  background-color: transparent;
+  color: var(--text-secondary);
+  border: 1px solid #DDDDDD;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* 不同区域的新建项目按钮 hover 时填充对应区颜色的 10% 透明度 */
+.zone-work .add-project-btn:hover {
+  background-color: var(--work-tag-bg);
+  border-color: var(--work-color);
+  color: var(--work-color);
+}
+
+.zone-advance .add-project-btn:hover {
+  background-color: var(--advance-tag-bg);
+  border-color: var(--advance-color);
+  color: var(--advance-color);
+}
+
+.zone-interest .add-project-btn:hover {
+  background-color: var(--interest-tag-bg);
+  border-color: var(--interest-color);
+  color: var(--interest-color);
+}
+
+/* 新建项目表单 */
+.add-project-form {
+  padding: 16px;
+  margin: 12px 0;
+  background-color: #FAFAFA;
+  border-radius: var(--radius-md);
+}
+
+.add-project-form input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  margin-bottom: 12px;
+  outline: none;
+}
+
+.add-project-form input:focus {
+  border-color: #A8C8E8;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.btn-primary {
+  padding: 6px 16px;
+  /* 主操作按钮用渐变色 */
+  background: linear-gradient(135deg, #A8C8E8, #9BC4A8);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+  box-shadow: 0 2px 8px rgba(168, 200, 232, 0.4);
+}
+
+.btn-secondary {
+  padding: 6px 16px;
+  background-color: #F5F5F5;
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+  border-color: #CCCCCC;
+  color: var(--text-primary);
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .zone-header {
+    padding: 14px 16px;
+  }
+
+  .zone-name {
+    font-size: 16px;
+  }
+
+  .zone-content {
+    padding: 0 16px 16px;
+  }
+
+  .add-project-btn {
+    padding: 10px;
+  }
+
+  .add-project-form {
+    padding: 12px;
+  }
+}

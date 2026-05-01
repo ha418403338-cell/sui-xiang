@@ -1,0 +1,272 @@
+/* 今日聚焦页面样式 */
+.today-focus-page {
+  padding: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.page-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.today-date {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+/* 状态卡片区域 */
+.status-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.status-card {
+  background-color: #FFFFFF;
+  border-radius: 20px;
+  box-shadow: var(--card-shadow);
+  padding: 24px 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+/* 今日聚焦状态卡片 - 使用对应区主题色的渐变背景 */
+/* 工作区卡片渐变背景 */
+.status-card.work-card {
+  background: linear-gradient(135deg, var(--work-gradient-start), var(--work-gradient-end));
+}
+
+/* 推进区卡片渐变背景 */
+.status-card.advance-card {
+  background: linear-gradient(135deg, var(--advance-gradient-start), var(--advance-gradient-end));
+}
+
+/* 兴趣区卡片渐变背景 */
+.status-card.interest-card {
+  background: linear-gradient(135deg, var(--interest-gradient-start), var(--interest-gradient-end));
+}
+
+/* 达标/打卡状态时卡片加一圈对应颜色的细边框 */
+/* 工作区达标边框 */
+.status-card.work-card.achieved {
+  border-color: var(--work-color);
+}
+
+/* 推进区打卡边框 */
+.status-card.advance-card.checked-in {
+  border-color: var(--advance-color);
+}
+
+/* 兴趣区达标边框 */
+.status-card.interest-card.achieved {
+  border-color: var(--interest-color);
+}
+
+.card-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin: 0 0 16px 0;
+}
+
+.card-main {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.card-count {
+  /* 卡片内数字字体加大加粗 */
+  font-size: 42px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.card-divider {
+  font-size: 24px;
+  color: var(--text-secondary);
+}
+
+.card-goal {
+  font-size: 18px;
+  color: var(--text-secondary);
+}
+
+.card-status {
+  margin-top: 8px;
+}
+
+.status-achieved {
+  font-size: 14px;
+  color: #52c41a;
+  font-weight: 600;
+}
+
+.status-remaining {
+  font-size: 13px;
+  color: #faad14;
+}
+
+.card-status-text {
+  font-size: 16px;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.card-streak {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.streak-number {
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.streak-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.card-subtitle {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 8px;
+}
+
+/* 任务快捷列表区域 */
+.task-quick-list {
+  background-color: #FFFFFF;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--card-shadow);
+  padding: 20px;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 16px 0;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #EEEEEE;
+}
+
+.zone-group {
+  margin-bottom: 16px;
+  border: 1px solid #EEEEEE;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.zone-group:last-child {
+  margin-bottom: 0;
+}
+
+.zone-group-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background-color: #FAFAFA;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.zone-group-header:hover {
+  background-color: #F0F0F0;
+}
+
+.group-toggle {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.group-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.group-count {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-left: auto;
+}
+
+.zone-group-tasks {
+  padding: 12px 16px;
+}
+
+.no-deadline-group {
+  margin-top: 16px;
+  border-style: dashed;
+  border-color: #DDDDDD;
+}
+
+.no-deadline-group .zone-group-header {
+  background-color: #FDFAF5;
+}
+
+.no-deadline-group .zone-group-header:hover {
+  background-color: #FAF5EB;
+}
+
+.no-deadline-group .group-name {
+  color: #C4A03A;
+}
+
+/* 移动端适配：今日聚焦三个卡片在手机端改为竖向排列 */
+@media (max-width: 768px) {
+  .today-focus-page {
+    padding: 16px;
+  }
+
+  .page-title {
+    font-size: 20px;
+  }
+
+  .status-cards {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .status-card {
+    padding: 20px 16px;
+  }
+
+  .card-count {
+    font-size: 36px;
+  }
+
+  .streak-number {
+    font-size: 40px;
+  }
+
+  .task-quick-list {
+    padding: 16px;
+  }
+
+  .zone-group-header {
+    padding: 10px 12px;
+  }
+
+  .zone-group-tasks {
+    padding: 10px 12px;
+  }
+}

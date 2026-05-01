@@ -1,0 +1,42 @@
+/* 全部任务页面样式 */
+.all-tasks-page {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.page-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 24px;
+}
+
+.zones-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* 移动端适配：垂直堆叠 */
+@media (max-width: 1024px) {
+  .zones-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .all-tasks-page {
+    padding: 16px;
+  }
+
+  .page-title {
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+
+  .zones-container {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}

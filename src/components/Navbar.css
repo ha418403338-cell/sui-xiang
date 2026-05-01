@@ -1,0 +1,74 @@
+/* 导航栏样式 */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  height: 56px;
+  /* 背景白色，底部加一条极细的浅灰分割线 */
+  background-color: #FFFFFF;
+  border-bottom: 1px solid #EEEEEE;
+  box-shadow: none;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand-icon {
+  font-size: 20px;
+}
+
+.brand-text {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.navbar-links {
+  display: flex;
+  gap: 8px;
+}
+
+.nav-link {
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.nav-link:hover {
+  color: #666666;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.nav-link.active {
+  /* 激活的导航按钮用柔和的渐变色背景 */
+  color: #FFFFFF;
+  background: linear-gradient(135deg, #A8C8E8, #C4B0E0);
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(164, 144, 224, 0.3);
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0 16px;
+  }
+
+  .brand-text {
+    font-size: 16px;
+  }
+
+  .nav-link {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+}
