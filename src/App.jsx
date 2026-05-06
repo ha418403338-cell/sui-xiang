@@ -12,7 +12,7 @@ function App() {
   // 全局状态管理：项目数据
   const { projects, createProject, deleteProject, updateProjectName, toggleProjectDone } = useProjects();
   // 全局状态管理：任务数据
-  const { tasks, createTask, deleteTask, toggleTaskDone, updateTask } = useTasks();
+  const { tasks, createTask, deleteTask, toggleTaskDone, updateTask, addSubtask, deleteSubtask, toggleSubtaskDone } = useTasks();
 
   // 处理创建项目
   const handleCreateProject = (zoneId, name) => {
@@ -49,6 +49,21 @@ function App() {
     toggleProjectDone(projectId);
   };
 
+  // 处理添加子任务
+  const handleAddSubtask = (taskId, title) => {
+    addSubtask(taskId, title);
+  };
+
+  // 处理删除子任务
+  const handleDeleteSubtask = (taskId, subtaskId) => {
+    deleteSubtask(taskId, subtaskId);
+  };
+
+  // 处理切换子任务完成状态
+  const handleToggleSubtaskDone = (taskId, subtaskId) => {
+    toggleSubtaskDone(taskId, subtaskId);
+  };
+
   return (
     <BrowserRouter>
       <div className="app">
@@ -69,6 +84,9 @@ function App() {
                   onUpdateTask={handleUpdateTask}
                   onUpdateProject={handleUpdateProject}
                   onToggleProjectDone={handleToggleProjectDone}
+                  onAddSubtask={handleAddSubtask}
+                  onDeleteSubtask={handleDeleteSubtask}
+                  onToggleSubtaskDone={handleToggleSubtaskDone}
                 />
               } 
             />

@@ -11,8 +11,11 @@ import './TaskItem.css';
  * @param {Function} onUpdate - 更新任务信息的回调函数
  * @param {string} [projectName] - 任务所属项目名称
  * @param {Function} [onActualMinDone] - 实际时长输入完成后的回调函数（用于今日聚焦页面）
+ * @param {Function} onAddSubtask - 添加子任务的回调函数
+ * @param {Function} onDeleteSubtask - 删除子任务的回调函数
+ * @param {Function} onToggleSubtaskDone - 切换子任务完成状态的回调函数
  */
-function TaskItem({ task, onToggle, onDelete, onUpdate, projectName, onActualMinDone }) {
+function TaskItem({ task, onToggle, onDelete, onUpdate, projectName, onActualMinDone, onAddSubtask, onDeleteSubtask, onToggleSubtaskDone }) {
   // 处理任务完成状态切换
   const handleToggle = () => {
     onToggle(task.id);
@@ -47,16 +50,30 @@ function TaskItem({ task, onToggle, onDelete, onUpdate, projectName, onActualMin
     deadline: task.deadline
   });
   const editRef = useRef(null);
+  const dateInputRef = useRef(null);
 
   // 实际时长输入状态（任务完成后可填写）
   const [showActualMin, setShowActualMin] = useState(false);
   const [actualMin, setActualMin] = useState(task.actualMin || '');
   const actualMinRef = useRef(null);
 
+  // 子任务相关状态
+  const [showSubtasks, setShowSubtasks] = useState(false);
+  const [newSubtaskTitle, setNewSubtaskTitle] = useState('');
+  const subtasks = task.subtasks || [];
+  const completedSubtasks = subtasks.filter(s => s.done).length;
+
   // 开始编辑
   const startEditing = () => {
     setIsEditing(true);
   };
+
+  // 编辑时自动聚焦日期输入框
+  useEffect(() => {
+    if (isEditing && dateInputRef.current) {
+      dateInputRef.current.focus();
+    }
+  }, [isEditing]);
 
   // 保存编辑
   const saveEditing = () => {
@@ -118,7 +135,7 @@ function TaskItem({ task, onToggle, onDelete, onUpdate, projectName, onActualMin
     if (e.key === 'Enter' && actualMin.trim()) {
       onUpdate(task.id, { actualMin: parseInt(actualMin) });
       setShowActualMin(false);
-      // 通知父组件实际时长输入已完成
+      // 通知父组件实际时长输入完成
       if (onActualMinDone) {
         onActualMinDone(task.id);
       }
@@ -136,9 +153,41 @@ function TaskItem({ task, onToggle, onDelete, onUpdate, projectName, onActualMin
     // 保存 actualMin 为 0，表示用户主动跳过
     onUpdate(task.id, { actualMin: 0 });
     setShowActualMin(false);
-    // 通知父组件实际时长输入已完成
+    // 通知父组件实际时长输入完成
     if (onActualMinDone) {
       onActualMinDone(task.id);
+    }
+  };
+
+  // 处理添加子任务
+  const handleAddSubtask = (e) => {
+    e.stopPropagation();
+    if (newSubtaskTitle.trim() && onAddSubtask) {
+      onAddSubtask(task.id, newSubtaskTitle.trim());
+      setNewSubtaskTitle('');
+    }
+  };
+
+  // 处理子任务回车键添加
+  const handleSubtaskKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleAddSubtask(e);
+    }
+  };
+
+  // 处理删除子任务
+  const handleDeleteSubtask = (e, subtaskId) => {
+    e.stopPropagation();
+    if (window.confirm('确定要删除这个子任务吗？') && onDeleteSubtask) {
+      onDeleteSubtask(task.id, subtaskId);
+    }
+  };
+
+  // 处理切换子任务完成状态
+  const handleToggleSubtask = (e, subtaskId) => {
+    e.stopPropagation();
+    if (onToggleSubtaskDone) {
+      onToggleSubtaskDone(task.id, subtaskId);
     }
   };
 
@@ -165,6 +214,7 @@ function TaskItem({ task, onToggle, onDelete, onUpdate, projectName, onActualMin
             <div className="edit-meta">
               <input
                 type="date"
+                ref={dateInputRef}
                 value={editData.deadline || ''}
                 onChange={(e) => setEditData({ ...editData, deadline: e.target.value })}
               />
@@ -176,10 +226,17 @@ function TaskItem({ task, onToggle, onDelete, onUpdate, projectName, onActualMin
           </div>
         ) : (
           <>
-            <span className="task-title" onClick={startEditing}>{task.title}</span>
+            <div className="task-title-row">
+              <span className="task-title" onClick={startEditing}>{task.title}</span>
+              {subtasks.length > 0 && (
+                <span className="subtask-progress">
+                  {completedSubtasks}/{subtasks.length}
+                </span>
+              )}
+            </div>
             <div className="task-meta">
               {task.deadline && (
-                <span className={`task-deadline ${deadlineClass}`}>📅 {task.deadline}</span>
+                <span className={`task-deadline ${deadlineClass}`} onClick={startEditing}>📅 {task.deadline}</span>
               )}
               {task.actualMin > 0 && (
                 <span className="task-duration" onClick={startEditActualMin}>⏱ {task.actualMin}分钟 ✏️</span>
@@ -193,7 +250,7 @@ function TaskItem({ task, onToggle, onDelete, onUpdate, projectName, onActualMin
             </div>
           </>
         )}
-        
+
         {/* 任务完成后的实际时长输入框 */}
         {task.done && showActualMin && (
           <div className="actual-min-form" ref={actualMinRef}>
@@ -210,14 +267,60 @@ function TaskItem({ task, onToggle, onDelete, onUpdate, projectName, onActualMin
             <button onClick={skipActualMin} className="btn-skip">跳过</button>
           </div>
         )}
+
+        {/* 子任务区域 */}
+        {showSubtasks && (
+          <div className="subtasks-container">
+            <div className="add-subtask-form">
+              <input
+                type="text"
+                placeholder="添加子任务..."
+                value={newSubtaskTitle}
+                onChange={(e) => setNewSubtaskTitle(e.target.value)}
+                onKeyPress={handleSubtaskKeyPress}
+                className="subtask-input"
+              />
+              <button onClick={handleAddSubtask} className="btn-add-subtask">添加</button>
+            </div>
+            {subtasks.map(subtask => (
+              <div key={subtask.id} className={`subtask-item ${subtask.done ? 'done' : ''}`}>
+                <input
+                  type="checkbox"
+                  checked={subtask.done}
+                  onChange={(e) => handleToggleSubtask(e, subtask.id)}
+                  className="subtask-checkbox"
+                />
+                <span className="subtask-title">{subtask.title}</span>
+                <button
+                  className="subtask-delete-btn"
+                  onClick={(e) => handleDeleteSubtask(e, subtask.id)}
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
-      <button
-        className="task-delete-btn"
-        onClick={handleDelete}
-        aria-label="删除任务"
-      >
-        🗑️
-      </button>
+      <div className="task-actions">
+        <button
+          className="add-subtask-toggle"
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowSubtasks(!showSubtasks);
+          }}
+          aria-label="切换子任务"
+        >
+          {showSubtasks ? '收起' : '+'}
+        </button>
+        <button
+          className="task-delete-btn"
+          onClick={handleDelete}
+          aria-label="删除任务"
+        >
+          🗑️
+        </button>
+      </div>
     </div>
   );
 }

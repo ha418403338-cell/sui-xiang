@@ -16,7 +16,7 @@ import './ZonePanel.css';
  * @param {Function} onUpdateProject - 更新项目名称的回调函数
  * @param {Function} onToggleProjectDone - 切换项目完成状态的回调函数
  */
-function ZonePanel({ zone, projects, tasks, onCreateProject, onCreateTask, onToggleTask, onDeleteTask, onUpdateTask, onUpdateProject, onToggleProjectDone }) {
+function ZonePanel({ zone, projects, tasks, onCreateProject, onCreateTask, onToggleTask, onDeleteTask, onUpdateTask, onUpdateProject, onToggleProjectDone, onAddSubtask, onDeleteSubtask, onToggleSubtaskDone }) {
   // 控制区面板的折叠/展开状态（移动端使用）
   const [isCollapsed, setIsCollapsed] = useState(false);
   // 控制新建项目输入框的显示状态
@@ -112,6 +112,9 @@ function ZonePanel({ zone, projects, tasks, onCreateProject, onCreateTask, onTog
                   onUpdateTask={onUpdateTask}
                   onUpdateProject={onUpdateProject}
                   onToggleProjectDone={onToggleProjectDone}
+                  onAddSubtask={onAddSubtask}
+                  onDeleteSubtask={onDeleteSubtask}
+                  onToggleSubtaskDone={onToggleSubtaskDone}
                 />
               ))}
 
@@ -142,6 +145,9 @@ function ZonePanel({ zone, projects, tasks, onCreateProject, onCreateTask, onTog
                           onUpdateTask={onUpdateTask}
                           onUpdateProject={onUpdateProject}
                           onToggleProjectDone={onToggleProjectDone}
+                          onAddSubtask={onAddSubtask}
+                          onDeleteSubtask={onDeleteSubtask}
+                          onToggleSubtaskDone={onToggleSubtaskDone}
                         />
                       ))}
                     </div>

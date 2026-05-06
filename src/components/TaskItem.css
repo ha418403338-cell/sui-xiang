@@ -57,6 +57,13 @@
   min-width: 0;
 }
 
+/* 任务标题行 - 包含标题和子任务进度 */
+.task-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .task-title {
   display: block;
   font-size: 14px;
@@ -72,6 +79,16 @@
   background-color: rgba(0, 0, 0, 0.04);
 }
 
+/* 子任务进度显示 */
+.subtask-progress {
+  font-size: 12px;
+  color: var(--text-secondary);
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 2px 8px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+
 .task-meta {
   display: flex;
   flex-wrap: wrap;
@@ -85,6 +102,7 @@
 .task-done-time {
   font-size: 12px;
   color: var(--text-secondary);
+  cursor: pointer;
 }
 
 /* 截止日期标签圆角 6px */
@@ -92,6 +110,11 @@
   padding: 2px 8px;
   border-radius: 6px;
   background-color: #F5F5F5;
+  transition: background-color 0.2s ease;
+}
+
+.task-deadline:hover {
+  background-color: rgba(0, 0, 0, 0.08);
 }
 
 /* 过期红色背景淡化为 #FDECEA */
@@ -112,8 +135,35 @@
   background-color: #F5F5F5;
 }
 
+/* 任务操作按钮区域 */
+.task-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* 添加子任务按钮 */
+.add-subtask-toggle {
+  padding: 4px 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: none;
+  border: 1px dashed #ccc;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  opacity: 0.6;
+  transition: all 0.2s ease;
+}
+
+.add-subtask-toggle:hover {
+  opacity: 1;
+  border-color: var(--text-primary);
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
 .task-delete-btn {
-  padding: 2px 8px;
+  padding: 4px 8px;
   font-size: 12px;
   color: #D93026;
   background: none;
@@ -245,6 +295,119 @@
   opacity: 1;
 }
 
+/* 子任务容器样式 */
+.subtasks-container {
+  margin-top: 12px;
+  padding: 12px;
+  background-color: #FAFAFA;
+  border-radius: var(--radius-sm);
+}
+
+/* 添加子任务表单 */
+.add-subtask-form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.subtask-input {
+  flex: 1;
+  padding: 6px 10px;
+  border: 1px solid #E0E0E0;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.subtask-input:focus {
+  border-color: #A8C8E8;
+}
+
+.btn-add-subtask {
+  padding: 6px 14px;
+  background-color: #A8C8E8;
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-add-subtask:hover {
+  background-color: #8BB8D8;
+}
+
+/* 单个子任务项 */
+.subtask-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid #EEEEEE;
+  transition: all 0.2s ease;
+}
+
+.subtask-item:last-child {
+  border-bottom: none;
+}
+
+.subtask-item.done {
+  opacity: 0.6;
+}
+
+.subtask-checkbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  border-radius: 50%;
+  accent-color: var(--advance-color);
+}
+
+/* 工作区子任务勾选框颜色 */
+.task-item.task-zone-work .subtask-checkbox {
+  accent-color: var(--work-color);
+}
+
+/* 推进区子任务勾选框颜色 */
+.task-item.task-zone-advance .subtask-checkbox {
+  accent-color: var(--advance-color);
+}
+
+/* 兴趣区子任务勾选框颜色 */
+.task-item.task-zone-interest .subtask-checkbox {
+  accent-color: var(--interest-color);
+}
+
+.subtask-title {
+  flex: 1;
+  font-size: 13px;
+  color: var(--text-primary);
+  word-break: break-word;
+}
+
+.subtask-item.done .subtask-title {
+  text-decoration: line-through;
+  color: #BBBBBB;
+}
+
+.subtask-delete-btn {
+  padding: 2px 6px;
+  font-size: 16px;
+  line-height: 1;
+  color: #D93026;
+  background: none;
+  border: none;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 0.2s ease;
+}
+
+.subtask-delete-btn:hover {
+  opacity: 1;
+}
+
 /* 移动端适配 */
 @media (max-width: 768px) {
   .task-item {
@@ -258,5 +421,23 @@
 
   .task-title {
     font-size: 13px;
+  }
+
+  .task-title-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .subtask-progress {
+    align-self: flex-start;
+  }
+
+  .add-subtask-form {
+    flex-direction: column;
+  }
+
+  .btn-add-subtask {
+    align-self: flex-start;
   }
 }

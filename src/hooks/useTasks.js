@@ -34,6 +34,7 @@ export function useTasks() {
       done: false,
       doneAt: null,
       deadline,
+      subtasks: [], // 新增子任务字段
       createdAt: new Date().toISOString()
     };
 
@@ -101,6 +102,72 @@ export function useTasks() {
     return tasks.filter(t => t.zoneId === zoneId);
   };
 
+  /**
+   * 添加子任务
+   * @param {string} taskId - 父任务 ID
+   * @param {string} title - 子任务标题
+   */
+  const addSubtask = (taskId, title) => {
+    const newSubtask = {
+      id: generateId(),
+      title,
+      done: false,
+      doneAt: null,
+      createdAt: new Date().toISOString()
+    };
+    setTasks(prev =>
+      prev.map(task =>
+        task.id === taskId
+          ? { ...task, subtasks: [...(task.subtasks || []), newSubtask] }
+          : task
+      )
+    );
+  };
+
+  /**
+   * 删除子任务
+   * @param {string} taskId - 父任务 ID
+   * @param {string} subtaskId - 子任务 ID
+   */
+  const deleteSubtask = (taskId, subtaskId) => {
+    setTasks(prev =>
+      prev.map(task =>
+        task.id === taskId
+          ? { ...task, subtasks: (task.subtasks || []).filter(s => s.id !== subtaskId) }
+          : task
+      )
+    );
+  };
+
+  /**
+   * 切换子任务完成状态
+   * @param {string} taskId - 父任务 ID
+   * @param {string} subtaskId - 子任务 ID
+   */
+  const toggleSubtaskDone = (taskId, subtaskId) => {
+    setTasks(prev =>
+      prev.map(task => {
+        if (task.id === taskId) {
+          return {
+            ...task,
+            subtasks: (task.subtasks || []).map(subtask => {
+              if (subtask.id === subtaskId) {
+                const newDone = !subtask.done;
+                return {
+                  ...subtask,
+                  done: newDone,
+                  doneAt: newDone ? new Date().toISOString() : null
+                };
+              }
+              return subtask;
+            })
+          };
+        }
+        return task;
+      })
+    );
+  };
+
   return {
     tasks,
     createTask,
@@ -108,6 +175,9 @@ export function useTasks() {
     toggleTaskDone,
     updateTask,
     getTasksByProjectId,
-    getTasksByZoneId
+    getTasksByZoneId,
+    addSubtask,
+    deleteSubtask,
+    toggleSubtaskDone
   };
 }

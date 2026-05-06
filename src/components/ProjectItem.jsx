@@ -14,7 +14,7 @@ import './ProjectItem.css';
  * @param {Function} onUpdateProject - 更新项目名称的回调函数
  * @param {Function} onToggleProjectDone - 切换项目完成状态的回调函数
  */
-function ProjectItem({ project, tasks, onCreateTask, onToggleTask, onDeleteTask, onUpdateTask, onUpdateProject, onToggleProjectDone }) {
+function ProjectItem({ project, tasks, onCreateTask, onToggleTask, onDeleteTask, onUpdateTask, onUpdateProject, onToggleProjectDone, onAddSubtask, onDeleteSubtask, onToggleSubtaskDone }) {
   // 控制项目折叠/展开状态
   const [isCollapsed, setIsCollapsed] = useState(false);
   // 控制新建任务输入框的显示状态
@@ -189,6 +189,9 @@ function ProjectItem({ project, tasks, onCreateTask, onToggleTask, onDeleteTask,
                 onToggle={onToggleTask}
                 onDelete={onDeleteTask}
                 onUpdate={onUpdateTask}
+                onAddSubtask={onAddSubtask}
+                onDeleteSubtask={onDeleteSubtask}
+                onToggleSubtaskDone={onToggleSubtaskDone}
               />
             ))
           ) : (
