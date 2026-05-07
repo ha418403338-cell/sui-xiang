@@ -12,7 +12,7 @@ function App() {
   // 全局状态管理：项目数据
   const { projects, createProject, deleteProject, updateProjectName, toggleProjectDone } = useProjects();
   // 全局状态管理：任务数据
-  const { tasks, createTask, deleteTask, toggleTaskDone, updateTask, addSubtask, deleteSubtask, toggleSubtaskDone } = useTasks();
+  const { tasks, createTask, deleteTask, toggleTaskDone, updateTask, addSubtask, deleteSubtask, toggleSubtaskDone, updateSubtask } = useTasks();
 
   // 处理创建项目
   const handleCreateProject = (zoneId, name) => {
@@ -64,6 +64,11 @@ function App() {
     toggleSubtaskDone(taskId, subtaskId);
   };
 
+  // 处理更新子任务标题
+  const handleUpdateSubtask = (taskId, subtaskId, newTitle) => {
+    updateSubtask(taskId, subtaskId, newTitle);
+  };
+
   return (
     <BrowserRouter>
       <div className="app">
@@ -71,8 +76,8 @@ function App() {
         <main className="main-content">
           <Routes>
             <Route path="/" element={<Navigate to="/all-tasks" replace />} />
-            <Route 
-              path="/all-tasks" 
+            <Route
+              path="/all-tasks"
               element={
                 <AllTasks
                   projects={projects}
@@ -87,11 +92,12 @@ function App() {
                   onAddSubtask={handleAddSubtask}
                   onDeleteSubtask={handleDeleteSubtask}
                   onToggleSubtaskDone={handleToggleSubtaskDone}
+                  onUpdateSubtask={handleUpdateSubtask}
                 />
-              } 
+              }
             />
-            <Route 
-              path="/today" 
+            <Route
+              path="/today"
               element={
                 <TodayFocus
                   projects={projects}
@@ -100,25 +106,25 @@ function App() {
                   onDeleteTask={handleDeleteTask}
                   onUpdateTask={handleUpdateTask}
                 />
-              } 
+              }
             />
-            <Route 
-              path="/history" 
+            <Route
+              path="/history"
               element={
                 <History
                   projects={projects}
                   tasks={tasks}
                 />
-              } 
+              }
             />
-            <Route 
-              path="/week-review" 
+            <Route
+              path="/week-review"
               element={
                 <WeekReview
                   projects={projects}
                   tasks={tasks}
                 />
-              } 
+              }
             />
           </Routes>
         </main>

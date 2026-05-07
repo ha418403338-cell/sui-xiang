@@ -13,8 +13,12 @@ import './ProjectItem.css';
  * @param {Function} onUpdateTask - 更新任务信息的回调函数
  * @param {Function} onUpdateProject - 更新项目名称的回调函数
  * @param {Function} onToggleProjectDone - 切换项目完成状态的回调函数
+ * @param {Function} onAddSubtask - 添加子任务的回调函数
+ * @param {Function} onDeleteSubtask - 删除子任务的回调函数
+ * @param {Function} onToggleSubtaskDone - 切换子任务完成状态的回调函数
+ * @param {Function} onUpdateSubtask - 更新子任务标题的回调函数
  */
-function ProjectItem({ project, tasks, onCreateTask, onToggleTask, onDeleteTask, onUpdateTask, onUpdateProject, onToggleProjectDone, onAddSubtask, onDeleteSubtask, onToggleSubtaskDone }) {
+function ProjectItem({ project, tasks, onCreateTask, onToggleTask, onDeleteTask, onUpdateTask, onUpdateProject, onToggleProjectDone, onAddSubtask, onDeleteSubtask, onToggleSubtaskDone, onUpdateSubtask }) {
   // 控制项目折叠/展开状态
   const [isCollapsed, setIsCollapsed] = useState(false);
   // 控制新建任务输入框的显示状态
@@ -173,8 +177,8 @@ function ProjectItem({ project, tasks, onCreateTask, onToggleTask, onDeleteTask,
               </div>
             </div>
           ) : (
-            <button 
-              onClick={() => setIsAddingTask(true)} 
+            <button
+              onClick={() => setIsAddingTask(true)}
               className="add-task-btn"
             >
               + 新建任务
@@ -192,6 +196,7 @@ function ProjectItem({ project, tasks, onCreateTask, onToggleTask, onDeleteTask,
                 onAddSubtask={onAddSubtask}
                 onDeleteSubtask={onDeleteSubtask}
                 onToggleSubtaskDone={onToggleSubtaskDone}
+                onUpdateSubtask={onUpdateSubtask}
               />
             ))
           ) : (

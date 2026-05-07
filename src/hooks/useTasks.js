@@ -168,6 +168,30 @@ export function useTasks() {
     );
   };
 
+  /**
+   * 更新子任务标题
+   * @param {string} taskId - 父任务 ID
+   * @param {string} subtaskId - 子任务 ID
+   * @param {string} newTitle - 新的子任务标题
+   */
+  const updateSubtask = (taskId, subtaskId, newTitle) => {
+    setTasks(prev =>
+      prev.map(task => {
+        if (task.id === taskId) {
+          return {
+            ...task,
+            subtasks: (task.subtasks || []).map(subtask =>
+              subtask.id === subtaskId
+                ? { ...subtask, title: newTitle }
+                : subtask
+            )
+          };
+        }
+        return task;
+      })
+    );
+  };
+
   return {
     tasks,
     createTask,
@@ -178,6 +202,7 @@ export function useTasks() {
     getTasksByZoneId,
     addSubtask,
     deleteSubtask,
-    toggleSubtaskDone
+    toggleSubtaskDone,
+    updateSubtask
   };
 }

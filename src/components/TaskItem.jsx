@@ -14,8 +14,9 @@ import './TaskItem.css';
  * @param {Function} onAddSubtask - 添加子任务的回调函数
  * @param {Function} onDeleteSubtask - 删除子任务的回调函数
  * @param {Function} onToggleSubtaskDone - 切换子任务完成状态的回调函数
+ * @param {Function} onUpdateSubtask - 更新子任务标题的回调函数
  */
-function TaskItem({ task, onToggle, onDelete, onUpdate, projectName, onActualMinDone, onAddSubtask, onDeleteSubtask, onToggleSubtaskDone }) {
+function TaskItem({ task, onToggle, onDelete, onUpdate, projectName, onActualMinDone, onAddSubtask, onDeleteSubtask, onToggleSubtaskDone, onUpdateSubtask }) {
   // 处理任务完成状态切换
   const handleToggle = () => {
     onToggle(task.id);
@@ -62,6 +63,10 @@ function TaskItem({ task, onToggle, onDelete, onUpdate, projectName, onActualMin
   const [newSubtaskTitle, setNewSubtaskTitle] = useState('');
   const subtasks = task.subtasks || [];
   const completedSubtasks = subtasks.filter(s => s.done).length;
+
+  // 子任务编辑状态 - 存储正在编辑的子任务ID和对应的标题
+  const [editingSubtaskId, setEditingSubtaskId] = useState(null);
+  const [editingSubtaskTitle, setEditingSubtaskTitle] = useState('');
 
   // 开始编辑
   const startEditing = () => {
@@ -191,6 +196,36 @@ function TaskItem({ task, onToggle, onDelete, onUpdate, projectName, onActualMin
     }
   };
 
+  // 开始编辑子任务标题
+  const startEditSubtask = (subtask) => {
+    e.stopPropagation();
+    setEditingSubtaskId(subtask.id);
+    setEditingSubtaskTitle(subtask.title);
+  };
+
+  // 处理子任务编辑键盘事件
+  const handleSubtaskEditKeyPress = (e, subtaskId) => {
+    if (e.key === 'Enter') {
+      // 保存子任务标题
+      if (editingSubtaskTitle.trim() && onUpdateSubtask) {
+        onUpdateSubtask(task.id, subtaskId, editingSubtaskTitle.trim());
+      }
+      setEditingSubtaskId(null);
+      setEditingSubtaskTitle('');
+    } else if (e.key === 'Escape') {
+      // 取消编辑
+      setEditingSubtaskId(null);
+      setEditingSubtaskTitle('');
+    }
+  };
+
+  // 点击子任务标题开始编辑
+  const handleSubtaskTitleClick = (e, subtask) => {
+    e.stopPropagation();
+    setEditingSubtaskId(subtask.id);
+    setEditingSubtaskTitle(subtask.title);
+  };
+
   return (
     <div className={`task-item task-zone-${task.zoneId} ${task.done ? 'done' : ''}`}>
       <div className="task-checkbox">
@@ -290,7 +325,31 @@ function TaskItem({ task, onToggle, onDelete, onUpdate, projectName, onActualMin
                   onChange={(e) => handleToggleSubtask(e, subtask.id)}
                   className="subtask-checkbox"
                 />
-                <span className="subtask-title">{subtask.title}</span>
+                {editingSubtaskId === subtask.id ? (
+                  <input
+                    type="text"
+                    value={editingSubtaskTitle}
+                    onChange={(e) => setEditingSubtaskTitle(e.target.value)}
+                    onKeyPress={(e) => handleSubtaskEditKeyPress(e, subtask.id)}
+                    onBlur={() => {
+                      // 失焦时保存
+                      if (editingSubtaskTitle.trim() && onUpdateSubtask) {
+                        onUpdateSubtask(task.id, subtask.id, editingSubtaskTitle.trim());
+                      }
+                      setEditingSubtaskId(null);
+                      setEditingSubtaskTitle('');
+                    }}
+                    autoFocus
+                    className="subtask-edit-input"
+                  />
+                ) : (
+                  <span
+                    className="subtask-title"
+                    onClick={(e) => handleSubtaskTitleClick(e, subtask)}
+                  >
+                    {subtask.title}
+                  </span>
+                )}
                 <button
                   className="subtask-delete-btn"
                   onClick={(e) => handleDeleteSubtask(e, subtask.id)}

@@ -15,8 +15,12 @@ import './ZonePanel.css';
  * @param {Function} onUpdateTask - 更新任务信息的回调函数
  * @param {Function} onUpdateProject - 更新项目名称的回调函数
  * @param {Function} onToggleProjectDone - 切换项目完成状态的回调函数
+ * @param {Function} onAddSubtask - 添加子任务的回调函数
+ * @param {Function} onDeleteSubtask - 删除子任务的回调函数
+ * @param {Function} onToggleSubtaskDone - 切换子任务完成状态的回调函数
+ * @param {Function} onUpdateSubtask - 更新子任务标题的回调函数
  */
-function ZonePanel({ zone, projects, tasks, onCreateProject, onCreateTask, onToggleTask, onDeleteTask, onUpdateTask, onUpdateProject, onToggleProjectDone, onAddSubtask, onDeleteSubtask, onToggleSubtaskDone }) {
+function ZonePanel({ zone, projects, tasks, onCreateProject, onCreateTask, onToggleTask, onDeleteTask, onUpdateTask, onUpdateProject, onToggleProjectDone, onAddSubtask, onDeleteSubtask, onToggleSubtaskDone, onUpdateSubtask }) {
   // 控制区面板的折叠/展开状态（移动端使用）
   const [isCollapsed, setIsCollapsed] = useState(false);
   // 控制新建项目输入框的显示状态
@@ -89,8 +93,8 @@ function ZonePanel({ zone, projects, tasks, onCreateProject, onCreateTask, onTog
               </div>
             </div>
           ) : (
-            <button 
-              onClick={() => setIsAddingProject(true)} 
+            <button
+              onClick={() => setIsAddingProject(true)}
               className="add-project-btn"
             >
               + 新建项目
@@ -115,6 +119,7 @@ function ZonePanel({ zone, projects, tasks, onCreateProject, onCreateTask, onTog
                   onAddSubtask={onAddSubtask}
                   onDeleteSubtask={onDeleteSubtask}
                   onToggleSubtaskDone={onToggleSubtaskDone}
+                  onUpdateSubtask={onUpdateSubtask}
                 />
               ))}
 
@@ -148,6 +153,7 @@ function ZonePanel({ zone, projects, tasks, onCreateProject, onCreateTask, onTog
                           onAddSubtask={onAddSubtask}
                           onDeleteSubtask={onDeleteSubtask}
                           onToggleSubtaskDone={onToggleSubtaskDone}
+                          onUpdateSubtask={onUpdateSubtask}
                         />
                       ))}
                     </div>
