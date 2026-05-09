@@ -47,20 +47,37 @@ function TodayFocus({ tasks, projects, onToggleTask, onDeleteTask, onUpdateTask 
   const noDeadlineTasks = tasks.filter(task => {
     // 未完成且无截止日期 或 刚完成正在等待填写实际时长且无截止日期
     return (!task.done || pendingActualMin.has(task.id)) && !task.deadline;
+  }).sort((a, b) => {
+    // 获取任务对应的项目
+    const projectA = projects.find(p => p.id === a.projectId);
+    const projectB = projects.find(p => p.id === b.projectId);
+    // 置顶项目优先
+    if (projectA?.pinned && !projectB?.pinned) return -1;
+    if (!projectA?.pinned && projectB?.pinned) return 1;
+    return 0;
   });
 
   // 按区分组的紧急任务
+  // 任务排序：置顶项目的任务 > 已过期 > 今天到期 > 未来
   const getUrgentTasksByZone = (zoneId) => {
-    return urgentTasks.filter(t => t.zoneId === zoneId);
+    const zoneTasks = urgentTasks.filter(t => t.zoneId === zoneId);
+    return sortTasks(zoneTasks, projects);
   };
 
-  // 任务排序：已过期 > 今天到期 > 未来
-  const sortTasks = (taskList) => {
+  // 任务排序：置顶项目的任务优先，然后按截止日期排序
+  const sortTasks = (taskList, projectList) => {
     return [...taskList].sort((a, b) => {
+      // 获取任务对应的项目
+      const projectA = projectList.find(p => p.id === a.projectId);
+      const projectB = projectList.find(p => p.id === b.projectId);
+      // 置顶项目优先
+      if (projectA?.pinned && !projectB?.pinned) return -1;
+      if (!projectA?.pinned && projectB?.pinned) return 1;
+      // 然后按截止日期排序：已过期 > 今天到期 > 未来
       const getPriority = (task) => {
-        if (task.deadline < today) return 0; // 已过期
-        if (task.deadline === today) return 1; // 今天
-        return 2; // 未来
+        if (task.deadline < today) return 0;
+        if (task.deadline === today) return 1;
+        return 2;
       };
       return getPriority(a) - getPriority(b);
     });

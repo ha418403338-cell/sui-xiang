@@ -264,7 +264,13 @@ function TaskItem({ task, onToggle, onDelete, onUpdate, projectName, onActualMin
             <div className="task-title-row">
               <span className="task-title" onClick={startEditing}>{task.title}</span>
               {subtasks.length > 0 && (
-                <span className="subtask-progress">
+                <span
+                  className="subtask-progress"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowSubtasks(!showSubtasks);
+                  }}
+                >
                   {completedSubtasks}/{subtasks.length}
                 </span>
               )}

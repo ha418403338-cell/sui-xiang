@@ -10,7 +10,7 @@ import './App.css';
 
 function App() {
   // 全局状态管理：项目数据
-  const { projects, createProject, deleteProject, updateProjectName, toggleProjectDone } = useProjects();
+  const { projects, createProject, deleteProject, updateProjectName, toggleProjectDone, togglePin } = useProjects();
   // 全局状态管理：任务数据
   const { tasks, createTask, deleteTask, toggleTaskDone, updateTask, addSubtask, deleteSubtask, toggleSubtaskDone, updateSubtask } = useTasks();
 
@@ -47,6 +47,11 @@ function App() {
   // 处理切换项目完成状态
   const handleToggleProjectDone = (projectId) => {
     toggleProjectDone(projectId);
+  };
+
+  // 处理切换项目置顶状态
+  const handleTogglePin = (projectId) => {
+    togglePin(projectId);
   };
 
   // 处理添加子任务
@@ -89,6 +94,7 @@ function App() {
                   onUpdateTask={handleUpdateTask}
                   onUpdateProject={handleUpdateProject}
                   onToggleProjectDone={handleToggleProjectDone}
+                  onTogglePin={handleTogglePin}
                   onAddSubtask={handleAddSubtask}
                   onDeleteSubtask={handleDeleteSubtask}
                   onToggleSubtaskDone={handleToggleSubtaskDone}

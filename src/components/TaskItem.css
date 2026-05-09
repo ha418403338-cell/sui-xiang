@@ -87,6 +87,12 @@
   padding: 2px 8px;
   border-radius: 10px;
   white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.subtask-progress:hover {
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .task-meta {
@@ -295,10 +301,11 @@
   opacity: 1;
 }
 
-/* 子任务容器样式 - 左右padding与父任务对齐 */
+/* 子任务容器样式 - 左右padding与父任务对齐，右边缘与垃圾桶按钮对齐 */
 .subtasks-container {
   margin-top: 12px;
-  padding: 12px 0 12px 12px;
+  margin-right: -12px;
+  padding: 12px 12px 12px 12px;
   background-color: #FAFAFA;
   border-radius: var(--radius-sm);
 }

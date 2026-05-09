@@ -82,12 +82,25 @@ export function useProjects() {
     );
   };
 
+  /**
+   * 切换项目置顶状态
+   * @param {string} projectId - 项目 ID
+   */
+  const togglePin = (projectId) => {
+    setProjects(prev =>
+      prev.map(p =>
+        p.id === projectId ? { ...p, pinned: !p.pinned } : p
+      )
+    );
+  };
+
   return {
     projects,
     createProject,
     deleteProject,
     updateProjectName,
     getProjectsByZoneId,
-    toggleProjectDone
+    toggleProjectDone,
+    togglePin
   };
 }

@@ -15,12 +15,13 @@ import './ZonePanel.css';
  * @param {Function} onUpdateTask - 更新任务信息的回调函数
  * @param {Function} onUpdateProject - 更新项目名称的回调函数
  * @param {Function} onToggleProjectDone - 切换项目完成状态的回调函数
+ * @param {Function} onTogglePin - 切换项目置顶状态的回调函数
  * @param {Function} onAddSubtask - 添加子任务的回调函数
  * @param {Function} onDeleteSubtask - 删除子任务的回调函数
  * @param {Function} onToggleSubtaskDone - 切换子任务完成状态的回调函数
  * @param {Function} onUpdateSubtask - 更新子任务标题的回调函数
  */
-function ZonePanel({ zone, projects, tasks, onCreateProject, onCreateTask, onToggleTask, onDeleteTask, onUpdateTask, onUpdateProject, onToggleProjectDone, onAddSubtask, onDeleteSubtask, onToggleSubtaskDone, onUpdateSubtask }) {
+function ZonePanel({ zone, projects, tasks, onCreateProject, onCreateTask, onToggleTask, onDeleteTask, onUpdateTask, onUpdateProject, onToggleProjectDone, onTogglePin, onAddSubtask, onDeleteSubtask, onToggleSubtaskDone, onUpdateSubtask }) {
   // 控制区面板的折叠/展开状态（移动端使用）
   const [isCollapsed, setIsCollapsed] = useState(false);
   // 控制新建项目输入框的显示状态
@@ -32,10 +33,22 @@ function ZonePanel({ zone, projects, tasks, onCreateProject, onCreateTask, onTog
 
   // 根据 zoneId 筛选项目
   const zoneProjects = projects.filter(p => p.zoneId === zone.id);
-  // 未完成项目
-  const activeProjects = zoneProjects.filter(p => !p.done);
-  // 已完成项目
-  const completedProjects = zoneProjects.filter(p => p.done);
+  // 未完成项目 - 置顶项目排在前面
+  const activeProjects = zoneProjects
+    .filter(p => !p.done)
+    .sort((a, b) => {
+      if (a.pinned && !b.pinned) return -1;
+      if (!a.pinned && b.pinned) return 1;
+      return 0;
+    });
+  // 已完成项目 - 置顶项目排在前面
+  const completedProjects = zoneProjects
+    .filter(p => p.done)
+    .sort((a, b) => {
+      if (a.pinned && !b.pinned) return -1;
+      if (!a.pinned && b.pinned) return 1;
+      return 0;
+    });
 
   // 根据 zoneId 筛选任务
   const zoneTasks = tasks.filter(t => t.zoneId === zone.id);
@@ -116,6 +129,7 @@ function ZonePanel({ zone, projects, tasks, onCreateProject, onCreateTask, onTog
                   onUpdateTask={onUpdateTask}
                   onUpdateProject={onUpdateProject}
                   onToggleProjectDone={onToggleProjectDone}
+                  onTogglePin={onTogglePin}
                   onAddSubtask={onAddSubtask}
                   onDeleteSubtask={onDeleteSubtask}
                   onToggleSubtaskDone={onToggleSubtaskDone}
@@ -150,6 +164,7 @@ function ZonePanel({ zone, projects, tasks, onCreateProject, onCreateTask, onTog
                           onUpdateTask={onUpdateTask}
                           onUpdateProject={onUpdateProject}
                           onToggleProjectDone={onToggleProjectDone}
+                          onTogglePin={onTogglePin}
                           onAddSubtask={onAddSubtask}
                           onDeleteSubtask={onDeleteSubtask}
                           onToggleSubtaskDone={onToggleSubtaskDone}

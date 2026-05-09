@@ -13,12 +13,13 @@ import './ProjectItem.css';
  * @param {Function} onUpdateTask - 更新任务信息的回调函数
  * @param {Function} onUpdateProject - 更新项目名称的回调函数
  * @param {Function} onToggleProjectDone - 切换项目完成状态的回调函数
+ * @param {Function} onTogglePin - 切换项目置顶状态的回调函数
  * @param {Function} onAddSubtask - 添加子任务的回调函数
  * @param {Function} onDeleteSubtask - 删除子任务的回调函数
  * @param {Function} onToggleSubtaskDone - 切换子任务完成状态的回调函数
  * @param {Function} onUpdateSubtask - 更新子任务标题的回调函数
  */
-function ProjectItem({ project, tasks, onCreateTask, onToggleTask, onDeleteTask, onUpdateTask, onUpdateProject, onToggleProjectDone, onAddSubtask, onDeleteSubtask, onToggleSubtaskDone, onUpdateSubtask }) {
+function ProjectItem({ project, tasks, onCreateTask, onToggleTask, onDeleteTask, onUpdateTask, onUpdateProject, onToggleProjectDone, onTogglePin, onAddSubtask, onDeleteSubtask, onToggleSubtaskDone, onUpdateSubtask }) {
   // 控制项目折叠/展开状态
   const [isCollapsed, setIsCollapsed] = useState(false);
   // 控制新建任务输入框的显示状态
@@ -139,6 +140,16 @@ function ProjectItem({ project, tasks, onCreateTask, onToggleTask, onDeleteTask,
             <h3 className={`project-name ${project.done ? 'done' : ''}`} onClick={startEditing}>{project.name}</h3>
           )}
         </div>
+        <button
+          className={`pin-btn ${project.pinned ? 'pinned' : ''}`}
+          onClick={(e) => {
+            e.stopPropagation();
+            onTogglePin(project.id);
+          }}
+          aria-label={project.pinned ? '取消置顶' : '置顶'}
+        >
+          ⭐
+        </button>
         {tasks.length > 0 && (
           <span className="project-progress">
             {completedCount}/{tasks.length}
