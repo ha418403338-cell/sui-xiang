@@ -90,6 +90,11 @@ function App() {
     deleteTimeRecord(taskId, recordId);
   };
 
+  // 处理更新时间记录
+  const handleUpdateTimeRecord = (taskId, recordId, updates) => {
+    updateTimeRecord(taskId, recordId, updates);
+  };
+
   return (
     <BrowserRouter>
       <div className="app">
@@ -118,6 +123,7 @@ function App() {
                   onUpdateSubtask={handleUpdateSubtask}
                   onAddTimeRecord={handleAddTimeRecord}
                   onDeleteTimeRecord={handleDeleteTimeRecord}
+                  onUpdateTimeRecord={handleUpdateTimeRecord}
                 />
               }
             />

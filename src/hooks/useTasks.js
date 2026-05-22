@@ -243,6 +243,43 @@ export function useTasks() {
     );
   };
 
+  /**
+   * 更新时间记录
+   * @param {string} taskId - 任务 ID
+   * @param {string} recordId - 时间记录 ID
+   * @param {Object} updates - 要更新的字段 { startTime, endTime, note }
+   */
+  const updateTimeRecord = (taskId, recordId, updates) => {
+    setTasks(prev =>
+      prev.map(task => {
+        if (task.id === taskId) {
+          const timeRecords = (task.timeRecords || []).map(record => {
+            if (record.id === recordId) {
+              const startTime = updates.startTime || record.startTime;
+              const endTime = updates.endTime || record.endTime;
+              const minutes = Math.round((new Date(endTime) - new Date(startTime)) / 60000) || 1;
+              return {
+                ...record,
+                startTime,
+                endTime,
+                minutes,
+                note: updates.note !== undefined ? updates.note : record.note
+              };
+            }
+            return record;
+          });
+          const newActualMin = timeRecords.reduce((sum, r) => sum + r.minutes, 0);
+          return {
+            ...task,
+            timeRecords,
+            actualMin: newActualMin
+          };
+        }
+        return task;
+      })
+    );
+  };
+
   return {
     tasks,
     createTask,
@@ -256,6 +293,7 @@ export function useTasks() {
     toggleSubtaskDone,
     updateSubtask,
     addTimeRecord,
-    deleteTimeRecord
+    deleteTimeRecord,
+    updateTimeRecord
   };
 }

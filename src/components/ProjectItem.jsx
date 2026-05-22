@@ -17,12 +17,13 @@ import './ProjectItem.css';
  * @param {Function} onUpdateProjectCategory - 更新项目类型的回调函数
  * @param {Function} onAddTimeRecord - 添加时间记录的回调函数
  * @param {Function} onDeleteTimeRecord - 删除时间记录的回调函数
+ * @param {Function} onUpdateTimeRecord - 更新时间记录的回调函数
  * @param {Function} onAddSubtask - 添加子任务的回调函数
  * @param {Function} onDeleteSubtask - 删除子任务的回调函数
  * @param {Function} onToggleSubtaskDone - 切换子任务完成状态的回调函数
  * @param {Function} onUpdateSubtask - 更新子任务标题的回调函数
  */
-function ProjectItem({ project, tasks, onCreateTask, onToggleTask, onDeleteTask, onUpdateTask, onUpdateProject, onToggleProjectDone, onTogglePin, onUpdateProjectCategory, onAddTimeRecord, onDeleteTimeRecord, onAddSubtask, onDeleteSubtask, onToggleSubtaskDone, onUpdateSubtask }) {
+function ProjectItem({ project, tasks, onCreateTask, onToggleTask, onDeleteTask, onUpdateTask, onUpdateProject, onToggleProjectDone, onTogglePin, onUpdateProjectCategory, onAddTimeRecord, onDeleteTimeRecord, onUpdateTimeRecord, onAddSubtask, onDeleteSubtask, onToggleSubtaskDone, onUpdateSubtask }) {
   // 控制项目折叠/展开状态
   const [isCollapsed, setIsCollapsed] = useState(false);
   // 控制新建任务输入框的显示状态
@@ -226,6 +227,7 @@ function ProjectItem({ project, tasks, onCreateTask, onToggleTask, onDeleteTask,
                 onUpdateSubtask={onUpdateSubtask}
                 onAddTimeRecord={onAddTimeRecord}
                 onDeleteTimeRecord={onDeleteTimeRecord}
+                onUpdateTimeRecord={onUpdateTimeRecord}
               />
             ))
           ) : (

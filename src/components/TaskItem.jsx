@@ -17,8 +17,9 @@ import './TaskItem.css';
  * @param {Function} onUpdateSubtask - 更新子任务标题的回调函数
  * @param {Function} onAddTimeRecord - 添加时间记录的回调函数
  * @param {Function} onDeleteTimeRecord - 删除时间记录的回调函数
+ * @param {Function} onUpdateTimeRecord - 更新时间记录的回调函数
  */
-function TaskItem({ task, onToggle, onDelete, onUpdate, projectName, onActualMinDone, onAddSubtask, onDeleteSubtask, onToggleSubtaskDone, onUpdateSubtask, onAddTimeRecord, onDeleteTimeRecord }) {
+function TaskItem({ task, onToggle, onDelete, onUpdate, projectName, onActualMinDone, onAddSubtask, onDeleteSubtask, onToggleSubtaskDone, onUpdateSubtask, onAddTimeRecord, onDeleteTimeRecord, onUpdateTimeRecord }) {
   // 处理任务完成状态切换
   const handleToggle = () => {
     onToggle(task.id);
@@ -176,6 +177,72 @@ function TaskItem({ task, onToggle, onDelete, onUpdate, projectName, onActualMin
     if (window.confirm('确定要删除这条时间记录吗？') && onDeleteTimeRecord) {
       onDeleteTimeRecord(task.id, recordId);
     }
+  };
+
+  // 编辑时间记录相关状态
+  const [editingRecordId, setEditingRecordId] = useState(null);
+  const [editingRecord, setEditingRecord] = useState({
+    date: '',
+    startTime: '',
+    endTime: '',
+    note: ''
+  });
+
+  // 开始编辑时间记录
+  const handleStartEditRecord = (record) => {
+    const startDate = new Date(record.startTime);
+    const endDate = new Date(record.endTime);
+    setEditingRecordId(record.id);
+    setEditingRecord({
+      date: `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}-${String(startDate.getDate()).padStart(2, '0')}`,
+      startTime: `${String(startDate.getHours()).padStart(2, '0')}:${String(startDate.getMinutes()).padStart(2, '0')}`,
+      endTime: `${String(endDate.getHours()).padStart(2, '0')}:${String(endDate.getMinutes()).padStart(2, '0')}`,
+      note: record.note || ''
+    });
+  };
+
+  // 取消编辑时间记录
+  const handleCancelEditRecord = () => {
+    setEditingRecordId(null);
+    setEditingRecord({
+      date: '',
+      startTime: '',
+      endTime: '',
+      note: ''
+    });
+  };
+
+  // 保存编辑的时间记录
+  const handleSaveEditRecord = () => {
+    if (editingRecord.startTime && editingRecord.endTime && onUpdateTimeRecord) {
+      const startTime = new Date(`${editingRecord.date}T${editingRecord.startTime}`);
+      const endTime = new Date(`${editingRecord.date}T${editingRecord.endTime}`);
+      
+      if (endTime > startTime) {
+        onUpdateTimeRecord(task.id, editingRecordId, {
+          startTime: startTime.toISOString(),
+          endTime: endTime.toISOString(),
+          note: editingRecord.note
+        });
+        handleCancelEditRecord();
+      }
+    }
+  };
+
+  // 处理编辑记录的时间变化
+  const handleEditingRecordChange = (field, value) => {
+    setEditingRecord(prev => ({ ...prev, [field]: value }));
+  };
+
+  // 计算编辑记录的分钟数
+  const getEditingRecordMinutes = () => {
+    if (editingRecord.startTime && editingRecord.endTime) {
+      const start = new Date(`${editingRecord.date}T${editingRecord.startTime}`);
+      const end = new Date(`${editingRecord.date}T${editingRecord.endTime}`);
+      const diff = Math.round((end - start) / 60000);
+      return diff > 0 ? diff : 0;
+    }
+    return 0;
   };
 
   // 计算手动记录的分钟数
@@ -556,21 +623,72 @@ function TaskItem({ task, onToggle, onDelete, onUpdate, projectName, onActualMin
                   const startTimeStr = `${String(startDate.getHours()).padStart(2, '0')}:${String(startDate.getMinutes()).padStart(2, '0')}`;
                   const endTimeStr = `${String(endDate.getHours()).padStart(2, '0')}:${String(endDate.getMinutes()).padStart(2, '0')}`;
                   const dateStr = `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}-${String(startDate.getDate()).padStart(2, '0')}`;
+                  const isEditing = editingRecordId === record.id;
                   
                   return (
                     <div key={record.id} className="time-record-item">
-                      <div className="record-info">
-                        <span className="record-date">{dateStr}</span>
-                        <span className="record-time-range">{startTimeStr} - {endTimeStr}</span>
-                        <span className="record-duration">{record.minutes}分钟</span>
-                        {record.note && <span className="record-note">{record.note}</span>}
-                      </div>
-                      <button
-                        className="record-delete-btn"
-                        onClick={() => handleDeleteTimeRecord(record.id)}
-                      >
-                        ×
-                      </button>
+                      {isEditing ? (
+                        <div className="record-edit-form">
+                          <input
+                            type="date"
+                            value={editingRecord.date}
+                            onChange={(e) => handleEditingRecordChange('date', e.target.value)}
+                            className="record-date-input"
+                          />
+                          <input
+                            type="time"
+                            value={editingRecord.startTime}
+                            onChange={(e) => handleEditingRecordChange('startTime', e.target.value)}
+                            className="record-time-input"
+                          />
+                          <span className="time-separator">-</span>
+                          <input
+                            type="time"
+                            value={editingRecord.endTime}
+                            onChange={(e) => handleEditingRecordChange('endTime', e.target.value)}
+                            className="record-time-input"
+                          />
+                          <input
+                            type="text"
+                            placeholder="备注（可选）"
+                            value={editingRecord.note}
+                            onChange={(e) => handleEditingRecordChange('note', e.target.value)}
+                            className="record-note-input"
+                          />
+                          <button onClick={handleSaveEditRecord} className="btn-save-record" disabled={!editingRecord.startTime || !editingRecord.endTime}>
+                            保存
+                          </button>
+                          <button onClick={handleCancelEditRecord} className="btn-cancel-record">
+                            取消
+                          </button>
+                          {getEditingRecordMinutes() > 0 && (
+                            <div className="record-preview">共 {getEditingRecordMinutes()} 分钟</div>
+                          )}
+                        </div>
+                      ) : (
+                        <>
+                          <div className="record-info">
+                            <span className="record-date">{dateStr}</span>
+                            <span className="record-time-range">{startTimeStr} - {endTimeStr}</span>
+                            <span className="record-duration">{record.minutes}分钟</span>
+                            {record.note && <span className="record-note">{record.note}</span>}
+                          </div>
+                          <div className="record-actions">
+                            <button
+                              className="record-edit-btn"
+                              onClick={() => handleStartEditRecord(record)}
+                            >
+                              ✏️
+                            </button>
+                            <button
+                              className="record-delete-btn"
+                              onClick={() => handleDeleteTimeRecord(record.id)}
+                            >
+                              ×
+                            </button>
+                          </div>
+                        </>
+                      )}
                     </div>
                   );
                 })}

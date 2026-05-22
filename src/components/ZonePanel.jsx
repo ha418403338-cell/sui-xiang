@@ -23,8 +23,9 @@ import './ZonePanel.css';
  * @param {Function} onUpdateSubtask - 更新子任务标题的回调函数
  * @param {Function} onAddTimeRecord - 添加时间记录的回调函数
  * @param {Function} onDeleteTimeRecord - 删除时间记录的回调函数
+ * @param {Function} onUpdateTimeRecord - 更新时间记录的回调函数
  */
-function ZonePanel({ zone, projects, tasks, onCreateProject, onCreateTask, onToggleTask, onDeleteTask, onUpdateTask, onUpdateProject, onToggleProjectDone, onTogglePin, onUpdateProjectCategory, onAddSubtask, onDeleteSubtask, onToggleSubtaskDone, onUpdateSubtask, onAddTimeRecord, onDeleteTimeRecord }) {
+function ZonePanel({ zone, projects, tasks, onCreateProject, onCreateTask, onToggleTask, onDeleteTask, onUpdateTask, onUpdateProject, onToggleProjectDone, onTogglePin, onUpdateProjectCategory, onAddSubtask, onDeleteSubtask, onToggleSubtaskDone, onUpdateSubtask, onAddTimeRecord, onDeleteTimeRecord, onUpdateTimeRecord }) {
   // 控制区面板的折叠/展开状态（移动端使用）
   const [isCollapsed, setIsCollapsed] = useState(false);
   // 控制新建项目输入框的显示状态
@@ -140,6 +141,7 @@ function ZonePanel({ zone, projects, tasks, onCreateProject, onCreateTask, onTog
                   onUpdateSubtask={onUpdateSubtask}
                   onAddTimeRecord={onAddTimeRecord}
                   onDeleteTimeRecord={onDeleteTimeRecord}
+                  onUpdateTimeRecord={onUpdateTimeRecord}
                 />
               ))}
 
@@ -178,6 +180,7 @@ function ZonePanel({ zone, projects, tasks, onCreateProject, onCreateTask, onTog
                           onUpdateSubtask={onUpdateSubtask}
                           onAddTimeRecord={onAddTimeRecord}
                           onDeleteTimeRecord={onDeleteTimeRecord}
+                          onUpdateTimeRecord={onUpdateTimeRecord}
                         />
                       ))}
                     </div>

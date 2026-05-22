@@ -677,6 +677,102 @@
   color: #D93026;
 }
 
+/* 时间记录编辑表单 */
+.record-edit-form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 8px;
+  background-color: #F5F5F5;
+  border-radius: var(--radius-sm);
+}
+
+.record-edit-form .record-date-input,
+.record-edit-form .record-time-input,
+.record-edit-form .record-note-input {
+  padding: 4px 6px;
+  font-size: 11px;
+}
+
+.record-edit-form .record-note-input {
+  flex: 1;
+  min-width: 80px;
+}
+
+.btn-save-record {
+  padding: 4px 8px;
+  background-color: #9BC4A8;
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-save-record:hover:not(:disabled) {
+  background-color: #7EB8D4;
+}
+
+.btn-save-record:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-cancel-record {
+  padding: 4px 8px;
+  background-color: transparent;
+  color: var(--text-secondary);
+  border: 1px solid #E0E0E0;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-cancel-record:hover {
+  background-color: #F0F0F0;
+  border-color: #CCCCCC;
+  color: var(--text-primary);
+}
+
+.record-edit-form .record-preview {
+  width: 100%;
+  margin-top: 4px;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+/* 时间记录操作按钮组 */
+.record-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.record-edit-btn {
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  line-height: 1;
+  color: #999;
+  background: none;
+  border: none;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 0.2s ease, color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.record-edit-btn:hover {
+  opacity: 1;
+  color: #7EB8D4;
+}
+
 /* 时间记录切换按钮 */
 .time-records-toggle {
   padding: 0;

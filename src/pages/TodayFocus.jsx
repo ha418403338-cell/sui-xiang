@@ -26,8 +26,18 @@ function TodayFocus({ tasks, projects, onToggleTask, onDeleteTask, onUpdateTask 
     return doneDate >= weekStart && doneDate <= weekEnd;
   }).length;
 
-  // 存储「刚完成、还在等待填写实际时长」的任务 id
+  // 控制「刚完成、还在等待填写实际时长」的任务 id 集合
   const [pendingActualMin, setPendingActualMin] = useState(new Set());
+
+  // 统一管理三个区的展开状态
+  const [zoneExpanded, setZoneExpanded] = useState({
+    work: true,
+    advance: true,
+    interest: true
+  });
+
+  // 控制无截止日期任务组的展开/折叠
+  const [isNoDeadlineExpanded, setIsNoDeadlineExpanded] = useState(false);
 
   // 筛选未完成任务：已过期 + 7天内到期
   const sevenDaysLater = new Date();
@@ -82,9 +92,6 @@ function TodayFocus({ tasks, projects, onToggleTask, onDeleteTask, onUpdateTask 
       return getPriority(a) - getPriority(b);
     });
   };
-
-  // 控制无截止日期任务组的展开/折叠
-  const [isNoDeadlineExpanded, setIsNoDeadlineExpanded] = useState(false);
 
   // 使用 streak 打卡逻辑
   const { workStreak, advanceStreak, workAchievedToday, advanceCheckedToday } = useStreak(tasks);
@@ -186,16 +193,15 @@ function TodayFocus({ tasks, projects, onToggleTask, onDeleteTask, onUpdateTask 
         {/* 三个区的分组任务 */}
         {ZONES.map(zone => {
           const zoneUrgentTasks = sortTasks(getUrgentTasksByZone(zone.id));
-          const [isExpanded, setIsExpanded] = useState(true);
 
           return (
             <div key={zone.id} className="zone-group">
-              <div className="zone-group-header" onClick={() => setIsExpanded(!isExpanded)}>
-                <span className="group-toggle">{isExpanded ? '▼' : '▶'}</span>
+              <div className="zone-group-header" onClick={() => setZoneExpanded(prev => ({ ...prev, [zone.id]: !prev[zone.id] }))}>
+                <span className="group-toggle">{zoneExpanded[zone.id] ? '▼' : '▶'}</span>
                 <span className="group-name">{zone.name}</span>
                 <span className="group-count">({zoneUrgentTasks.length}项)</span>
               </div>
-              {isExpanded && zoneUrgentTasks.length > 0 && (
+              {zoneExpanded[zone.id] && zoneUrgentTasks.length > 0 && (
                 <div className="zone-group-tasks">
                   {zoneUrgentTasks.map(task => {
                     const project = projects.find(p => p.id === task.projectId);
