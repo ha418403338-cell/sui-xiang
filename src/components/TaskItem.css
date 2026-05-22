@@ -447,6 +447,256 @@
   color: #D93026;
 }
 
+/* 时间记录容器样式 */
+.time-records-container {
+  margin-top: 12px;
+  margin-right: -12px;
+  padding: 12px 12px 12px 12px;
+  background-color: #FAFAFA;
+  border-radius: var(--radius-sm);
+}
+
+.time-records-header h4 {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* 实时计时区域 */
+.timer-section {
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #EEEEEE;
+}
+
+.timer-display {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.timer-time {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.btn-start-timer {
+  padding: 6px 12px;
+  background-color: #A8C8E8;
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-start-timer:hover {
+  background-color: #8BB8D8;
+}
+
+.btn-stop-timer {
+  padding: 6px 12px;
+  background-color: #E8A8A8;
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-stop-timer:hover {
+  background-color: #D88888;
+}
+
+/* 手动补记区域 */
+.manual-record-section {
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #EEEEEE;
+}
+
+.manual-record-form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.record-date-input {
+  padding: 6px 8px;
+  border: 1px solid #E0E0E0;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.record-date-input:focus {
+  border-color: #A8C8E8;
+}
+
+.record-time-input {
+  padding: 6px 8px;
+  border: 1px solid #E0E0E0;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.record-time-input:focus {
+  border-color: #A8C8E8;
+}
+
+.time-separator {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.record-note-input {
+  flex: 1;
+  min-width: 120px;
+  padding: 6px 8px;
+  border: 1px solid #E0E0E0;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.record-note-input:focus {
+  border-color: #A8C8E8;
+}
+
+.btn-add-record {
+  padding: 6px 12px;
+  background-color: #9BC4A8;
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-add-record:hover:not(:disabled) {
+  background-color: #7EB8D4;
+}
+
+.btn-add-record:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.record-preview {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* 时间记录列表 */
+.time-records-list {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.time-record-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #EEEEEE;
+  transition: background-color 0.2s ease;
+}
+
+.time-record-item:last-child {
+  border-bottom: none;
+}
+
+.time-record-item:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.record-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  flex-wrap: wrap;
+}
+
+.record-date {
+  font-size: 12px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.record-time-range {
+  font-size: 12px;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.record-duration {
+  font-size: 12px;
+  font-weight: 500;
+  color: #9BC4A8;
+  white-space: nowrap;
+}
+
+.record-note {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.record-delete-btn {
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  font-size: 14px;
+  line-height: 1;
+  color: #999;
+  background: none;
+  border: none;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 0.2s ease, color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.record-delete-btn:hover {
+  opacity: 1;
+  color: #D93026;
+}
+
+/* 时间记录切换按钮 */
+.time-records-toggle {
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  font-size: 14px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.time-records-toggle:hover {
+  opacity: 1;
+}
+
 /* 移动端适配 */
 @media (max-width: 768px) {
   .task-item {

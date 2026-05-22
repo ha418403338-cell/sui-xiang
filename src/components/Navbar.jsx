@@ -3,7 +3,7 @@ import './Navbar.css';
 
 /**
  * 导航栏组件
- * 页面顶部导航，包含三个入口：今日聚焦 / 全部任务 / 历史记录
+ * 页面顶部导航，包含四个入口：今日聚焦 / 全部任务 / 历史记录 / 周回顾 / 时间统计
  */
 function Navbar() {
   return (
@@ -36,6 +36,12 @@ function Navbar() {
           className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
         >
           周回顾
+        </NavLink>
+        <NavLink
+          to="/time-stats"
+          className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+        >
+          ⏱️ 时间统计
         </NavLink>
       </div>
     </nav>

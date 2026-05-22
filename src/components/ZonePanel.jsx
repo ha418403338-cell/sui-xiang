@@ -16,12 +16,15 @@ import './ZonePanel.css';
  * @param {Function} onUpdateProject - 更新项目名称的回调函数
  * @param {Function} onToggleProjectDone - 切换项目完成状态的回调函数
  * @param {Function} onTogglePin - 切换项目置顶状态的回调函数
+ * @param {Function} onUpdateProjectCategory - 更新项目类型的回调函数
  * @param {Function} onAddSubtask - 添加子任务的回调函数
  * @param {Function} onDeleteSubtask - 删除子任务的回调函数
  * @param {Function} onToggleSubtaskDone - 切换子任务完成状态的回调函数
  * @param {Function} onUpdateSubtask - 更新子任务标题的回调函数
+ * @param {Function} onAddTimeRecord - 添加时间记录的回调函数
+ * @param {Function} onDeleteTimeRecord - 删除时间记录的回调函数
  */
-function ZonePanel({ zone, projects, tasks, onCreateProject, onCreateTask, onToggleTask, onDeleteTask, onUpdateTask, onUpdateProject, onToggleProjectDone, onTogglePin, onAddSubtask, onDeleteSubtask, onToggleSubtaskDone, onUpdateSubtask }) {
+function ZonePanel({ zone, projects, tasks, onCreateProject, onCreateTask, onToggleTask, onDeleteTask, onUpdateTask, onUpdateProject, onToggleProjectDone, onTogglePin, onUpdateProjectCategory, onAddSubtask, onDeleteSubtask, onToggleSubtaskDone, onUpdateSubtask, onAddTimeRecord, onDeleteTimeRecord }) {
   // 控制区面板的折叠/展开状态（移动端使用）
   const [isCollapsed, setIsCollapsed] = useState(false);
   // 控制新建项目输入框的显示状态
@@ -130,10 +133,13 @@ function ZonePanel({ zone, projects, tasks, onCreateProject, onCreateTask, onTog
                   onUpdateProject={onUpdateProject}
                   onToggleProjectDone={onToggleProjectDone}
                   onTogglePin={onTogglePin}
+                  onUpdateProjectCategory={onUpdateProjectCategory}
                   onAddSubtask={onAddSubtask}
                   onDeleteSubtask={onDeleteSubtask}
                   onToggleSubtaskDone={onToggleSubtaskDone}
                   onUpdateSubtask={onUpdateSubtask}
+                  onAddTimeRecord={onAddTimeRecord}
+                  onDeleteTimeRecord={onDeleteTimeRecord}
                 />
               ))}
 
@@ -165,10 +171,13 @@ function ZonePanel({ zone, projects, tasks, onCreateProject, onCreateTask, onTog
                           onUpdateProject={onUpdateProject}
                           onToggleProjectDone={onToggleProjectDone}
                           onTogglePin={onTogglePin}
+                          onUpdateProjectCategory={onUpdateProjectCategory}
                           onAddSubtask={onAddSubtask}
                           onDeleteSubtask={onDeleteSubtask}
                           onToggleSubtaskDone={onToggleSubtaskDone}
                           onUpdateSubtask={onUpdateSubtask}
+                          onAddTimeRecord={onAddTimeRecord}
+                          onDeleteTimeRecord={onDeleteTimeRecord}
                         />
                       ))}
                     </div>

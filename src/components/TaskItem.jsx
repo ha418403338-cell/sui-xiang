@@ -15,8 +15,10 @@ import './TaskItem.css';
  * @param {Function} onDeleteSubtask - 删除子任务的回调函数
  * @param {Function} onToggleSubtaskDone - 切换子任务完成状态的回调函数
  * @param {Function} onUpdateSubtask - 更新子任务标题的回调函数
+ * @param {Function} onAddTimeRecord - 添加时间记录的回调函数
+ * @param {Function} onDeleteTimeRecord - 删除时间记录的回调函数
  */
-function TaskItem({ task, onToggle, onDelete, onUpdate, projectName, onActualMinDone, onAddSubtask, onDeleteSubtask, onToggleSubtaskDone, onUpdateSubtask }) {
+function TaskItem({ task, onToggle, onDelete, onUpdate, projectName, onActualMinDone, onAddSubtask, onDeleteSubtask, onToggleSubtaskDone, onUpdateSubtask, onAddTimeRecord, onDeleteTimeRecord }) {
   // 处理任务完成状态切换
   const handleToggle = () => {
     onToggle(task.id);
@@ -67,6 +69,125 @@ function TaskItem({ task, onToggle, onDelete, onUpdate, projectName, onActualMin
   // 子任务编辑状态 - 存储正在编辑的子任务ID和对应的标题
   const [editingSubtaskId, setEditingSubtaskId] = useState(null);
   const [editingSubtaskTitle, setEditingSubtaskTitle] = useState('');
+
+  // 时间记录相关状态
+  const [showTimeRecords, setShowTimeRecords] = useState(false);
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const [timerStartTime, setTimerStartTime] = useState(null);
+  const [elapsedTime, setElapsedTime] = useState(0);
+  const [manualRecord, setManualRecord] = useState({
+    date: new Date().toISOString().split('T')[0],
+    startTime: '',
+    endTime: '',
+    note: ''
+  });
+  const timeRecords = task.timeRecords || [];
+
+  // 从 localStorage 读取计时状态
+  useEffect(() => {
+    const activeTimer = localStorage.getItem('todo_active_timer');
+    if (activeTimer) {
+      const { taskId, startTime } = JSON.parse(activeTimer);
+      if (taskId === task.id) {
+        setIsTimerRunning(true);
+        setTimerStartTime(startTime);
+      }
+    }
+  }, [task.id]);
+
+  // 实时计时器
+  useEffect(() => {
+    let interval;
+    if (isTimerRunning && timerStartTime) {
+      interval = setInterval(() => {
+        const now = new Date();
+        const start = new Date(timerStartTime);
+        const diff = Math.floor((now - start) / 1000);
+        setElapsedTime(diff);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [isTimerRunning, timerStartTime]);
+
+  // 格式化计时显示
+  const formatElapsedTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}分${secs}秒`;
+  };
+
+  // 开始计时
+  const handleStartTimer = () => {
+    const startTime = new Date().toISOString();
+    setTimerStartTime(startTime);
+    setIsTimerRunning(true);
+    setElapsedTime(0);
+    localStorage.setItem('todo_active_timer', JSON.stringify({
+      taskId: task.id,
+      startTime
+    }));
+  };
+
+  // 结束计时
+  const handleStopTimer = () => {
+    const endTime = new Date().toISOString();
+    if (onAddTimeRecord) {
+      onAddTimeRecord(task.id, {
+        startTime: timerStartTime,
+        endTime,
+        note: ''
+      });
+    }
+    setIsTimerRunning(false);
+    setTimerStartTime(null);
+    setElapsedTime(0);
+    localStorage.removeItem('todo_active_timer');
+  };
+
+  // 处理手动记录时间变化
+  const handleManualRecordChange = (field, value) => {
+    setManualRecord(prev => ({ ...prev, [field]: value }));
+  };
+
+  // 添加手动记录
+  const handleAddManualRecord = () => {
+    if (manualRecord.startTime && manualRecord.endTime && onAddTimeRecord) {
+      const startTime = new Date(`${manualRecord.date}T${manualRecord.startTime}`);
+      const endTime = new Date(`${manualRecord.date}T${manualRecord.endTime}`);
+      
+      if (endTime > startTime) {
+        onAddTimeRecord(task.id, {
+          startTime: startTime.toISOString(),
+          endTime: endTime.toISOString(),
+          note: manualRecord.note
+        });
+        setManualRecord({
+          date: new Date().toISOString().split('T')[0],
+          startTime: '',
+          endTime: '',
+          note: ''
+        });
+      }
+    }
+  };
+
+  // 删除时间记录
+  const handleDeleteTimeRecord = (recordId) => {
+    if (window.confirm('确定要删除这条时间记录吗？') && onDeleteTimeRecord) {
+      onDeleteTimeRecord(task.id, recordId);
+    }
+  };
+
+  // 计算手动记录的分钟数
+  const getManualRecordMinutes = () => {
+    if (manualRecord.startTime && manualRecord.endTime) {
+      const start = new Date(`${manualRecord.date}T${manualRecord.startTime}`);
+      const end = new Date(`${manualRecord.date}T${manualRecord.endTime}`);
+      const diff = Math.round((end - start) / 60000);
+      return diff > 0 ? diff : 0;
+    }
+    return 0;
+  };
 
   // 开始编辑
   const startEditing = () => {
@@ -366,8 +487,109 @@ function TaskItem({ task, onToggle, onDelete, onUpdate, projectName, onActualMin
             ))}
           </div>
         )}
+
+        {/* 时间记录区域 */}
+        {showTimeRecords && (
+          <div className="time-records-container">
+            <div className="time-records-header">
+              <h4>时间记录</h4>
+            </div>
+            
+            {/* 实时计时 */}
+            <div className="timer-section">
+              <div className="timer-display">
+                {isTimerRunning ? (
+                  <>
+                    <span className="timer-time">{formatElapsedTime(elapsedTime)}</span>
+                    <button onClick={handleStopTimer} className="btn-stop-timer">结束计时</button>
+                  </>
+                ) : (
+                  <button onClick={handleStartTimer} className="btn-start-timer">开始计时</button>
+                )}
+              </div>
+            </div>
+
+            {/* 手动补记 */}
+            <div className="manual-record-section">
+              <div className="manual-record-form">
+                <input
+                  type="date"
+                  value={manualRecord.date}
+                  onChange={(e) => handleManualRecordChange('date', e.target.value)}
+                  className="record-date-input"
+                />
+                <input
+                  type="time"
+                  value={manualRecord.startTime}
+                  onChange={(e) => handleManualRecordChange('startTime', e.target.value)}
+                  className="record-time-input"
+                />
+                <span className="time-separator">-</span>
+                <input
+                  type="time"
+                  value={manualRecord.endTime}
+                  onChange={(e) => handleManualRecordChange('endTime', e.target.value)}
+                  className="record-time-input"
+                />
+                <input
+                  type="text"
+                  placeholder="备注（可选）"
+                  value={manualRecord.note}
+                  onChange={(e) => handleManualRecordChange('note', e.target.value)}
+                  className="record-note-input"
+                />
+                <button onClick={handleAddManualRecord} className="btn-add-record" disabled={!manualRecord.startTime || !manualRecord.endTime}>
+                  添加
+                </button>
+              </div>
+              {getManualRecordMinutes() > 0 && (
+                <div className="record-preview">共 {getManualRecordMinutes()} 分钟</div>
+              )}
+            </div>
+
+            {/* 时间记录列表 */}
+            {timeRecords.length > 0 && (
+              <div className="time-records-list">
+                {timeRecords.map(record => {
+                  const startDate = new Date(record.startTime);
+                  const endDate = new Date(record.endTime);
+                  const startTimeStr = `${String(startDate.getHours()).padStart(2, '0')}:${String(startDate.getMinutes()).padStart(2, '0')}`;
+                  const endTimeStr = `${String(endDate.getHours()).padStart(2, '0')}:${String(endDate.getMinutes()).padStart(2, '0')}`;
+                  const dateStr = `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}-${String(startDate.getDate()).padStart(2, '0')}`;
+                  
+                  return (
+                    <div key={record.id} className="time-record-item">
+                      <div className="record-info">
+                        <span className="record-date">{dateStr}</span>
+                        <span className="record-time-range">{startTimeStr} - {endTimeStr}</span>
+                        <span className="record-duration">{record.minutes}分钟</span>
+                        {record.note && <span className="record-note">{record.note}</span>}
+                      </div>
+                      <button
+                        className="record-delete-btn"
+                        onClick={() => handleDeleteTimeRecord(record.id)}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
       </div>
       <div className="task-actions">
+        <button
+          className="time-records-toggle"
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowTimeRecords(!showTimeRecords);
+          }}
+          aria-label="切换时间记录"
+        >
+          ⏱️
+        </button>
         <button
           className="add-subtask-toggle"
           onClick={(e) => {

@@ -4,15 +4,16 @@ import AllTasks from './pages/AllTasks.jsx';
 import TodayFocus from './pages/TodayFocus.jsx';
 import History from './pages/History.jsx';
 import WeekReview from './pages/WeekReview.jsx';
+import TimeStats from './pages/TimeStats.jsx';
 import { useProjects } from './hooks/useProjects.js';
 import { useTasks } from './hooks/useTasks.js';
 import './App.css';
 
 function App() {
   // 全局状态管理：项目数据
-  const { projects, createProject, deleteProject, updateProjectName, toggleProjectDone, togglePin } = useProjects();
+  const { projects, createProject, deleteProject, updateProjectName, toggleProjectDone, togglePin, updateProjectCategory } = useProjects();
   // 全局状态管理：任务数据
-  const { tasks, createTask, deleteTask, toggleTaskDone, updateTask, addSubtask, deleteSubtask, toggleSubtaskDone, updateSubtask } = useTasks();
+  const { tasks, createTask, deleteTask, toggleTaskDone, updateTask, addSubtask, deleteSubtask, toggleSubtaskDone, updateSubtask, addTimeRecord, deleteTimeRecord } = useTasks();
 
   // 处理创建项目
   const handleCreateProject = (zoneId, name) => {
@@ -54,6 +55,11 @@ function App() {
     togglePin(projectId);
   };
 
+  // 处理更新项目类型
+  const handleUpdateProjectCategory = (projectId, category) => {
+    updateProjectCategory(projectId, category);
+  };
+
   // 处理添加子任务
   const handleAddSubtask = (taskId, title) => {
     addSubtask(taskId, title);
@@ -72,6 +78,16 @@ function App() {
   // 处理更新子任务标题
   const handleUpdateSubtask = (taskId, subtaskId, newTitle) => {
     updateSubtask(taskId, subtaskId, newTitle);
+  };
+
+  // 处理添加时间记录
+  const handleAddTimeRecord = (taskId, record) => {
+    addTimeRecord(taskId, record);
+  };
+
+  // 处理删除时间记录
+  const handleDeleteTimeRecord = (taskId, recordId) => {
+    deleteTimeRecord(taskId, recordId);
   };
 
   return (
@@ -95,10 +111,13 @@ function App() {
                   onUpdateProject={handleUpdateProject}
                   onToggleProjectDone={handleToggleProjectDone}
                   onTogglePin={handleTogglePin}
+                  onUpdateProjectCategory={handleUpdateProjectCategory}
                   onAddSubtask={handleAddSubtask}
                   onDeleteSubtask={handleDeleteSubtask}
                   onToggleSubtaskDone={handleToggleSubtaskDone}
                   onUpdateSubtask={handleUpdateSubtask}
+                  onAddTimeRecord={handleAddTimeRecord}
+                  onDeleteTimeRecord={handleDeleteTimeRecord}
                 />
               }
             />
@@ -127,6 +146,15 @@ function App() {
               path="/week-review"
               element={
                 <WeekReview
+                  projects={projects}
+                  tasks={tasks}
+                />
+              }
+            />
+            <Route
+              path="/time-stats"
+              element={
+                <TimeStats
                   projects={projects}
                   tasks={tasks}
                 />

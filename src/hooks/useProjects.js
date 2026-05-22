@@ -94,6 +94,19 @@ export function useProjects() {
     );
   };
 
+  /**
+   * 更新项目类型
+   * @param {string} projectId - 项目 ID
+   * @param {string} category - 项目类型：'primary' | 'side' | 'other'
+   */
+  const updateProjectCategory = (projectId, category) => {
+    setProjects(prev =>
+      prev.map(p =>
+        p.id === projectId ? { ...p, category } : p
+      )
+    );
+  };
+
   return {
     projects,
     createProject,
@@ -101,6 +114,7 @@ export function useProjects() {
     updateProjectName,
     getProjectsByZoneId,
     toggleProjectDone,
-    togglePin
+    togglePin,
+    updateProjectCategory
   };
 }

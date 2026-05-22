@@ -192,6 +192,57 @@ export function useTasks() {
     );
   };
 
+  /**
+   * 添加时间记录
+   * @param {string} taskId - 任务 ID
+   * @param {Object} record - 时间记录对象 { startTime, endTime, note }
+   */
+  const addTimeRecord = (taskId, record) => {
+    const newRecord = {
+      id: generateId(),
+      startTime: record.startTime,
+      endTime: record.endTime,
+      minutes: Math.round((new Date(record.endTime) - new Date(record.startTime)) / 60000) || 1,
+      note: record.note || ''
+    };
+    setTasks(prev =>
+      prev.map(task => {
+        if (task.id === taskId) {
+          const timeRecords = task.timeRecords || [];
+          const newActualMin = timeRecords.reduce((sum, r) => sum + r.minutes, 0) + newRecord.minutes;
+          return {
+            ...task,
+            timeRecords: [...timeRecords, newRecord],
+            actualMin: newActualMin
+          };
+        }
+        return task;
+      })
+    );
+  };
+
+  /**
+   * 删除时间记录
+   * @param {string} taskId - 任务 ID
+   * @param {string} recordId - 时间记录 ID
+   */
+  const deleteTimeRecord = (taskId, recordId) => {
+    setTasks(prev =>
+      prev.map(task => {
+        if (task.id === taskId) {
+          const timeRecords = (task.timeRecords || []).filter(r => r.id !== recordId);
+          const newActualMin = timeRecords.reduce((sum, r) => sum + r.minutes, 0);
+          return {
+            ...task,
+            timeRecords,
+            actualMin: newActualMin
+          };
+        }
+        return task;
+      })
+    );
+  };
+
   return {
     tasks,
     createTask,
@@ -203,6 +254,8 @@ export function useTasks() {
     addSubtask,
     deleteSubtask,
     toggleSubtaskDone,
-    updateSubtask
+    updateSubtask,
+    addTimeRecord,
+    deleteTimeRecord
   };
 }

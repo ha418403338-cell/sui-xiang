@@ -6,7 +6,7 @@ import './AllTasks.css';
  * 全部任务页面
  * 桌面端三列布局显示三个区，移动端三个折叠面板
  */
-function AllTasks({ projects, tasks, onCreateProject, onCreateTask, onToggleTask, onDeleteTask, onUpdateTask, onUpdateProject, onToggleProjectDone, onTogglePin, onAddSubtask, onDeleteSubtask, onToggleSubtaskDone, onUpdateSubtask }) {
+function AllTasks({ projects, tasks, onCreateProject, onCreateTask, onToggleTask, onDeleteTask, onUpdateTask, onUpdateProject, onToggleProjectDone, onTogglePin, onUpdateProjectCategory, onAddSubtask, onDeleteSubtask, onToggleSubtaskDone, onUpdateSubtask, onAddTimeRecord, onDeleteTimeRecord }) {
   return (
     <div className="all-tasks-page">
       <h1 className="page-title">全部任务</h1>
@@ -25,10 +25,13 @@ function AllTasks({ projects, tasks, onCreateProject, onCreateTask, onToggleTask
             onUpdateProject={onUpdateProject}
             onToggleProjectDone={onToggleProjectDone}
             onTogglePin={onTogglePin}
+            onUpdateProjectCategory={onUpdateProjectCategory}
             onAddSubtask={onAddSubtask}
             onDeleteSubtask={onDeleteSubtask}
             onToggleSubtaskDone={onToggleSubtaskDone}
             onUpdateSubtask={onUpdateSubtask}
+            onAddTimeRecord={onAddTimeRecord}
+            onDeleteTimeRecord={onDeleteTimeRecord}
           />
         ))}
       </div>

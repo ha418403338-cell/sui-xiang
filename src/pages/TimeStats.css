@@ -1,0 +1,272 @@
+/* 时间统计页面样式 */
+.time-stats-page {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.page-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+}
+
+/* 时间范围切换标签 */
+.time-range-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.tab {
+  padding: 8px 16px;
+  background-color: #FAFAFA;
+  border: 1px solid #E0E0E0;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab:hover {
+  background-color: #F0F0F0;
+}
+
+.tab.active {
+  background-color: #A8C8E8;
+  color: white;
+  border-color: #A8C8E8;
+}
+
+/* 统计卡片 */
+.stats-card {
+  background-color: white;
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.card-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+/* 总时长卡片 */
+.total-duration-card {
+  text-align: center;
+}
+
+.total-duration {
+  padding: 20px 0;
+}
+
+.duration-value {
+  font-size: 36px;
+  font-weight: 700;
+  color: #7EB8D4;
+}
+
+.no-data {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+/* 分类占比图表 */
+.category-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.chart-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.category-bar-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.bar-label {
+  width: 40px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.bar-container {
+  flex: 1;
+  height: 20px;
+  background-color: #F5F5F5;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.bar {
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.3s ease;
+  border: 1px solid;
+}
+
+.bar-percentage {
+  width: 50px;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: right;
+}
+
+.category-summary {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.summary-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.summary-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.summary-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.summary-value {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* 项目排行 */
+.project-ranking {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.project-ranking-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  background-color: #FAFAFA;
+  border-radius: var(--radius-sm);
+}
+
+.rank-badge {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #E0E0E0;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.project-info {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.project-name {
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.category-tag {
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 500;
+  border-radius: 10px;
+  border: 1px solid;
+}
+
+.project-duration {
+  font-size: 14px;
+  font-weight: 500;
+  color: #9BC4A8;
+}
+
+/* 任务明细 */
+.task-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.task-detail-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: #FAFAFA;
+  border-radius: var(--radius-sm);
+}
+
+.task-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.task-title {
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.task-project {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.task-duration {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .time-stats-page {
+    padding: 15px;
+  }
+
+  .duration-value {
+    font-size: 28px;
+  }
+
+  .category-summary {
+    gap: 12px;
+  }
+
+  .project-ranking-item {
+    flex-wrap: wrap;
+  }
+
+  .project-info {
+    flex-basis: 100%;
+    order: 2;
+  }
+
+  .project-duration {
+    order: 1;
+  }
+}

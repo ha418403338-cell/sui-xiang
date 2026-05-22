@@ -117,6 +117,39 @@
   opacity: 0.8;
 }
 
+/* 项目类型标签样式 */
+.category-tag {
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 500;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.category-tag.category-primary {
+  background-color: rgba(168, 200, 232, 0.2);
+  color: #7EB8D4;
+  border: 1px solid rgba(168, 200, 232, 0.3);
+}
+
+.category-tag.category-side {
+  background-color: rgba(155, 196, 168, 0.2);
+  color: #9BC4A8;
+  border: 1px solid rgba(155, 196, 168, 0.3);
+}
+
+.category-tag.category-other {
+  background-color: rgba(153, 153, 153, 0.15);
+  color: #999;
+  border: 1px solid rgba(153, 153, 153, 0.2);
+}
+
+.category-tag:hover {
+  transform: scale(1.05);
+}
+
 .task-list {
   padding: 8px 16px 12px;
 }

@@ -113,7 +113,8 @@ export const ZONES = [
 - [ ] 模块四：streak 打卡（工作区达标型 + 推进区习惯型）
 - [ ] 模块五：历史记录
 - [ ] 模块六：周回顾小结
-
+- [x] 子任务功能（任务下可添加子任务，支持勾选/编辑/删除，进度显示）
+- [x] 项目置顶功能（pinned 字段，置顶项目显示在区域最顶部）
 ---
 
 ## Skills 沉淀区（预留）
@@ -142,3 +143,8 @@ const [data, setData] = useState([]);
 当多个页面需要读取同一份数据时（如 tasks、projects），
 状态必须定义在 App.jsx 顶层，通过 props 向下传递。
 不能把状态放在子组件内部，否则切换页面时数据会丢失。
+
+### Skill：嵌套数据结构（子任务）
+子任务直接嵌套在 task.subtasks 数组里，不单独建 localStorage key。
+更新子任务时通过 updateTask(taskId, { subtasks: newSubtasks }) 整体替换，
+不要单独操作子任务的存储。
