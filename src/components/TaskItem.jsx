@@ -84,6 +84,12 @@ function TaskItem({ task, onToggle, onDelete, onUpdate, projectName, onActualMin
   });
   const timeRecords = task.timeRecords || [];
 
+  // 批量导入时间记录相关状态
+  const [showBatchImport, setShowBatchImport] = useState(false);
+  const [batchImportDate, setBatchImportDate] = useState(new Date().toISOString().split('T')[0]);
+  const [batchImportText, setBatchImportText] = useState('');
+  const [batchImportResults, setBatchImportResults] = useState([]);
+
   // 从 localStorage 读取计时状态
   useEffect(() => {
     const activeTimer = localStorage.getItem('todo_active_timer');
@@ -177,6 +183,105 @@ function TaskItem({ task, onToggle, onDelete, onUpdate, projectName, onActualMin
     if (window.confirm('确定要删除这条时间记录吗？') && onDeleteTimeRecord) {
       onDeleteTimeRecord(task.id, recordId);
     }
+  };
+
+  // 解析批量导入的时间文本
+  const parseBatchImport = () => {
+    const lines = batchImportText.trim().split('\n');
+    const results = [];
+    const timeRegex = /^(\d{2}):(\d{2})-(\d{2}):(\d{2})$/;
+    
+    lines.forEach((line, index) => {
+      const trimmedLine = line.trim();
+      if (!trimmedLine) return;
+      
+      const match = trimmedLine.match(timeRegex);
+      if (match) {
+        const startHour = parseInt(match[1], 10);
+        const startMin = parseInt(match[2], 10);
+        const endHour = parseInt(match[3], 10);
+        const endMin = parseInt(match[4], 10);
+        
+        // 验证时间有效性
+        if (startHour >= 0 && startHour <= 23 && startMin >= 0 && startMin <= 59 &&
+            endHour >= 0 && endHour <= 23 && endMin >= 0 && endMin <= 59) {
+          const startMinutes = startHour * 60 + startMin;
+          const endMinutes = endHour * 60 + endMin;
+          
+          if (endMinutes > startMinutes) {
+            const minutes = endMinutes - startMinutes;
+            results.push({
+              line: trimmedLine,
+              valid: true,
+              startHour,
+              startMin,
+              endHour,
+              endMin,
+              minutes,
+              index
+            });
+          } else {
+            results.push({
+              line: trimmedLine,
+              valid: false,
+              error: '结束时间必须晚于开始时间',
+              index
+            });
+          }
+        } else {
+          results.push({
+            line: trimmedLine,
+            valid: false,
+            error: '时间格式无效',
+            index
+          });
+        }
+      } else {
+        results.push({
+          line: trimmedLine,
+          valid: false,
+          error: '格式不正确，应为 HH:MM-HH:MM',
+          index
+        });
+      }
+    });
+    
+    setBatchImportResults(results);
+  };
+
+  // 批量导入时间记录
+  const handleBatchImport = () => {
+    const validResults = batchImportResults.filter(r => r.valid);
+    
+    if (validResults.length === 0) {
+      alert('没有有效的时间记录可导入');
+      return;
+    }
+    
+    validResults.forEach(result => {
+      const startTime = new Date(`${batchImportDate}T${String(result.startHour).padStart(2, '0')}:${String(result.startMin).padStart(2, '0')}`);
+      const endTime = new Date(`${batchImportDate}T${String(result.endHour).padStart(2, '0')}:${String(result.endMin).padStart(2, '0')}`);
+      
+      if (onAddTimeRecord) {
+        onAddTimeRecord(task.id, {
+          startTime: startTime.toISOString(),
+          endTime: endTime.toISOString(),
+          note: ''
+        });
+      }
+    });
+    
+    // 清空导入表单
+    setBatchImportText('');
+    setBatchImportResults([]);
+    setShowBatchImport(false);
+  };
+
+  // 计算批量导入的总时长
+  const getBatchImportTotalMinutes = () => {
+    return batchImportResults
+      .filter(r => r.valid)
+      .reduce((sum, r) => sum + r.minutes, 0);
   };
 
   // 编辑时间记录相关状态
@@ -611,6 +716,96 @@ function TaskItem({ task, onToggle, onDelete, onUpdate, projectName, onActualMin
               </div>
               {getManualRecordMinutes() > 0 && (
                 <div className="record-preview">共 {getManualRecordMinutes()} 分钟</div>
+              )}
+            </div>
+
+            {/* 批量导入 */}
+            <div className="batch-import-section">
+              <button 
+                onClick={() => {
+                  setShowBatchImport(!showBatchImport);
+                  if (!showBatchImport) {
+                    setBatchImportResults([]);
+                  }
+                }} 
+                className="btn-batch-import"
+              >
+                {showBatchImport ? '收起批量导入' : '批量导入'}
+              </button>
+              
+              {showBatchImport && (
+                <div className="batch-import-form">
+                  <input
+                    type="date"
+                    value={batchImportDate}
+                    onChange={(e) => {
+                      setBatchImportDate(e.target.value);
+                      // 日期变化时重新解析
+                      if (batchImportText.trim()) {
+                        parseBatchImport();
+                      }
+                    }}
+                    className="record-date-input"
+                  />
+                  <textarea
+                    value={batchImportText}
+                    onChange={(e) => {
+                      setBatchImportText(e.target.value);
+                    }}
+                    onBlur={parseBatchImport}
+                    placeholder="粘贴时间段，每行一个，格式：
+09:00-10:30
+14:00-15:45
+16:20-17:00"
+                    className="batch-import-textarea"
+                    rows={4}
+                  />
+                  
+                  {/* 解析结果预览 */}
+                  {batchImportResults.length > 0 && (
+                    <div className="batch-import-preview">
+                      {batchImportResults.map((result, index) => (
+                        <div key={index} className={`preview-item ${result.valid ? 'valid' : 'invalid'}`}>
+                          <span className="preview-line">{result.line}</span>
+                          {result.valid ? (
+                            <span className="preview-minutes">→ {result.minutes}分钟</span>
+                          ) : (
+                            <span className="preview-error">{result.error}</span>
+                          )}
+                        </div>
+                      ))}
+                      <div className="batch-total">
+                        共 {getBatchImportTotalMinutes()} 分钟
+                      </div>
+                    </div>
+                  )}
+                  
+                  <div className="batch-import-actions">
+                    <button 
+                      onClick={parseBatchImport} 
+                      className="btn-parse"
+                      disabled={!batchImportText.trim()}
+                    >
+                      解析
+                    </button>
+                    <button 
+                      onClick={handleBatchImport} 
+                      className="btn-confirm-import"
+                      disabled={getBatchImportTotalMinutes() === 0}
+                    >
+                      确认导入
+                    </button>
+                    <button 
+                      onClick={() => {
+                        setBatchImportText('');
+                        setBatchImportResults([]);
+                      }} 
+                      className="btn-clear"
+                    >
+                      清空
+                    </button>
+                  </div>
+                </div>
               )}
             </div>
 

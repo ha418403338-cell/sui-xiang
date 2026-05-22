@@ -773,6 +773,149 @@
   color: #7EB8D4;
 }
 
+/* 批量导入按钮 */
+.btn-batch-import {
+  padding: 4px 12px;
+  font-size: 12px;
+  color: #7EB8D4;
+  background: none;
+  border: 1px solid #7EB8D4;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 8px;
+}
+
+.btn-batch-import:hover {
+  background-color: rgba(126, 184, 212, 0.1);
+}
+
+/* 批量导入表单 */
+.batch-import-form {
+  margin-top: 8px;
+  padding: 12px;
+  background-color: #FAFAFA;
+  border-radius: var(--radius-sm);
+  border: 1px solid #E8E8E8;
+}
+
+.batch-import-textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 8px;
+  font-size: 12px;
+  font-family: monospace;
+  border: 1px solid #E0E0E0;
+  border-radius: var(--radius-sm);
+  resize: vertical;
+  box-sizing: border-box;
+  margin-top: 8px;
+}
+
+/* 批量导入预览 */
+.batch-import-preview {
+  margin-top: 12px;
+  padding: 8px;
+  background-color: white;
+  border-radius: var(--radius-sm);
+  border: 1px solid #E0E0E0;
+}
+
+.preview-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  font-size: 12px;
+}
+
+.preview-item.valid {
+  color: var(--text-primary);
+}
+
+.preview-item.invalid {
+  color: #D93026;
+}
+
+.preview-line {
+  font-family: monospace;
+}
+
+.preview-minutes {
+  color: #7EB8D4;
+  font-weight: 500;
+}
+
+.preview-error {
+  color: #D93026;
+  font-size: 11px;
+}
+
+.batch-total {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed #E0E0E0;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* 批量导入操作按钮 */
+.batch-import-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.btn-parse,
+.btn-confirm-import,
+.btn-clear {
+  padding: 4px 12px;
+  font-size: 12px;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-parse {
+  background-color: #F0F0F0;
+  color: var(--text-secondary);
+}
+
+.btn-parse:hover:not(:disabled) {
+  background-color: #E0E0E0;
+}
+
+.btn-parse:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-confirm-import {
+  background-color: #9BC4A8;
+  color: white;
+}
+
+.btn-confirm-import:hover:not(:disabled) {
+  background-color: #7EB8D4;
+}
+
+.btn-confirm-import:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-clear {
+  background-color: transparent;
+  color: var(--text-secondary);
+  border: 1px solid #E0E0E0;
+}
+
+.btn-clear:hover {
+  background-color: #F5F5F5;
+}
+
 /* 时间记录切换按钮 */
 .time-records-toggle {
   padding: 0;

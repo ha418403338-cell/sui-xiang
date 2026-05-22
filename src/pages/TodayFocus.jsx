@@ -9,7 +9,7 @@ import './TodayFocus.css';
  * 今日聚焦页面
  * 核心是状态仪表盘，任务快捷列表是辅助
  */
-function TodayFocus({ tasks, projects, onToggleTask, onDeleteTask, onUpdateTask }) {
+function TodayFocus({ tasks, projects, onToggleTask, onDeleteTask, onUpdateTask, onUpdateTimeRecord }) {
   const today = getTodayString();
   const { weekStart, weekEnd } = getWeekStartEnd();
 
@@ -192,7 +192,7 @@ function TodayFocus({ tasks, projects, onToggleTask, onDeleteTask, onUpdateTask 
 
         {/* 三个区的分组任务 */}
         {ZONES.map(zone => {
-          const zoneUrgentTasks = sortTasks(getUrgentTasksByZone(zone.id));
+          const zoneUrgentTasks = sortTasks(getUrgentTasksByZone(zone.id), projects);
 
           return (
             <div key={zone.id} className="zone-group">
@@ -214,6 +214,7 @@ function TodayFocus({ tasks, projects, onToggleTask, onDeleteTask, onUpdateTask 
                         onUpdate={onUpdateTask}
                         projectName={project ? project.name : '未分类'}
                         onActualMinDone={handleActualMinDone}
+                        onUpdateTimeRecord={onUpdateTimeRecord}
                       />
                     );
                   })}
@@ -240,14 +241,15 @@ function TodayFocus({ tasks, projects, onToggleTask, onDeleteTask, onUpdateTask 
                   const project = projects.find(p => p.id === task.projectId);
                   return (
                     <TaskItem
-                      key={task.id}
-                      task={task}
-                      onToggle={handleToggleTask}
-                      onDelete={onDeleteTask}
-                      onUpdate={onUpdateTask}
-                      projectName={project ? project.name : '未分类'}
-                      onActualMinDone={handleActualMinDone}
-                    />
+                    key={task.id}
+                    task={task}
+                    onToggle={handleToggleTask}
+                    onDelete={onDeleteTask}
+                    onUpdate={onUpdateTask}
+                    projectName={project ? project.name : '未分类'}
+                    onActualMinDone={handleActualMinDone}
+                    onUpdateTimeRecord={onUpdateTimeRecord}
+                  />
                   );
                 })}
               </div>

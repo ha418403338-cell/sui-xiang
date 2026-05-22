@@ -136,6 +136,7 @@ function App() {
                   onToggleTask={handleToggleTask}
                   onDeleteTask={handleDeleteTask}
                   onUpdateTask={handleUpdateTask}
+                  onUpdateTimeRecord={handleUpdateTimeRecord}
                 />
               }
             />
